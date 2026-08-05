@@ -12,6 +12,9 @@
   --crest: #6fc3ce;
   --sp: 16px;
   --accent: var(--water);
+  /* Alto real de la barra pegajosa. Lo mide Nav.tsx: crece con el aviso de
+     falta de conexion, y las anclas tienen que apartarse de el. */
+  --nav-h: 61px;
 }
 
 /* Acentos por dia y por tipo de alternativa. Mismos tres colores en ambos. */
@@ -170,6 +173,8 @@ nav {
 
 main { padding: 0 var(--sp); }
 section { padding-top: 28px; }
+/* Sin esto, saltar por un chip deja la cabecera del dia debajo del nav. */
+section[id] { scroll-margin-top: var(--nav-h); }
 
 /* ── aviso destacado ───────────────────────────────────────── */
 .alert {
@@ -251,7 +256,7 @@ section { padding-top: 28px; }
   flex: 0 0 auto;
   width: 16px;
   height: 16px;
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   display: grid;
   place-items: center;
   font-size: 12px;
@@ -452,7 +457,7 @@ details[open] summary { margin-bottom: 12px; }
   flex: 0 0 auto;
   width: 14px;
   height: 14px;
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   display: grid;
   place-items: center;
   font-size: 11px;

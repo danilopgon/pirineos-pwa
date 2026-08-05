@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { labels, trip } from '../data/trip'
 
 interface Props {
@@ -5,7 +6,32 @@ interface Props {
   online: boolean
 }
 
+/**
+ * Publica el alto de la barra en `--nav-h`. El aviso de falta de conexion la
+ * hace crecer, y sin esto los saltos por ancla dejan la cabecera del dia
+ * escondida debajo.
+ */
+function useStickyHeight() {
+  const ref = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const nav = ref.current
+    if (!nav) return
+    const sync = () => {
+      document.documentElement.style.setProperty('--nav-h', `${nav.offsetHeight}px`)
+    }
+    sync()
+    const observer = new ResizeObserver(sync)
+    observer.observe(nav)
+    return () => observer.disconnect()
+  }, [])
+
+  return ref
+}
+
 export function Nav({ done, online }: Props) {
+  const ref = useStickyHeight()
+
   const chips = [
     { id: trip.alert.id, label: trip.alert.short, done: false },
     ...trip.days.map((day) => ({
@@ -17,7 +43,7 @@ export function Nav({ done, online }: Props) {
   ]
 
   return (
-    <nav>
+    <nav ref={ref}>
       <div className="chips">
         {chips.map((chip) => (
           <a key={chip.id} href={`#${chip.id}`} data-done={chip.done}>
