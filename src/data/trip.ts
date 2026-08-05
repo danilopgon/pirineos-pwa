@@ -20,8 +20,8 @@ export const trip: Trip = {
     title: 'Lo que condiciona todo el viaje',
     body: [
       'En verano hay tres valles del Parque Natural Posets-Maladeta cerrados al coche particular: **La Besurta, Vallibierna y Espigantosa**, del **20 de junio al 13 de septiembre de 2026**. Solo se entra en autobús lanzadera, en taxi o andando.',
-      'En el Parque Nacional de Ordesa pasa lo mismo: la **Pradera de Ordesa** solo es accesible en lanzadera desde Torla del 19 de junio al 20 de septiembre.',
-      'Traducción: sin autobús quedan fuera el Aneto por la cara norte, los Ibones de Coronas, la cascada de Espigantosa y el Ordesa "de postal". Al parking del Vado / Llanos del Hospital sí se llega en coche, y de ahí se sigue a pie. Ordesa se sustituye por Añisclo, que es el mismo parque nacional y admite coche. Todo el plan está construido con esa regla.',
+      'En el Parque Nacional de Ordesa pasa lo mismo: del 19 de junio al 20 de septiembre la **Pradera de Ordesa** está cerrada al coche particular y se entra en lanzadera desde Torla o a pie por el Turieto.',
+      'Traducción: sin autobús quedan fuera el Aneto por la cara norte, los Ibones de Coronas, la cascada de Espigantosa y el Ordesa "de postal" (a la Pradera se sube a pie desde Torla por el Turieto, pero son unas 2 h por sentido antes de empezar la ruta). Al parking del Vado / Llanos del Hospital sí se llega en coche, y de ahí se sigue a pie. Ordesa se sustituye por Añisclo, que es el mismo parque nacional y admite coche. Todo el plan está construido con esa regla.',
     ],
   },
 
@@ -819,7 +819,7 @@ export const trip: Trip = {
           heading: 'Fechas que importan en 2026',
           list: [
             'Besurta, Vallibierna y Espigantosa cerrados al coche: 20 de junio a 13 de septiembre.',
-            'Pradera de Ordesa solo en lanzadera desde Torla: 19 de junio a 20 de septiembre.',
+            'Pradera de Ordesa cerrada al coche particular, en lanzadera desde Torla o a pie por el Turieto: 19 de junio a 20 de septiembre.',
             'Catedral de Roda de Isábena: cerrada los martes y las tardes de lunes.',
             'Iglesias de la Vall de Boí: 10:00–14:00 y 16:00–19:00.',
             'Si el viaje se mueve a finales de septiembre se abren en coche La Besurta, Vallibierna y la Pradera de Ordesa, y el plan cambia entero. Merece la pena recalcularlo.',

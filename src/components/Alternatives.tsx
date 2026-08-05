@@ -1,7 +1,7 @@
 import { labels } from '../data/trip'
 import type { Alternative, Day } from '../data/types'
 import { miniItems } from '../lib/format'
-import { Btns, DriveButton, Mini, Note, Paragraphs } from './Text'
+import { Btns, Mini, Note, Paragraphs, PlaceLink } from './Text'
 
 interface Props {
   day: Day
@@ -46,7 +46,7 @@ function AltCard({
       {alt.place && (
         <>
           <Btns>
-            <DriveButton place={alt.place} ghost small />
+            <PlaceLink place={alt.place} />
           </Btns>
           <Note text={alt.place.note} />
         </>

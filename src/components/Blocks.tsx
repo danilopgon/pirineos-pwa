@@ -11,7 +11,7 @@ import {
   Mini,
   Note,
   Paragraphs,
-  PlaceButton,
+  PlaceLink,
 } from './Text'
 
 export interface InstallState {
@@ -97,12 +97,7 @@ function Card({ card }: { card: InfoCard }) {
       )}
       {(card.place || card.links?.length) && (
         <Btns>
-          {card.place &&
-            (card.place.googlePlaceId ? (
-              <PlaceButton place={card.place} />
-            ) : (
-              <DriveButton place={card.place} ghost small />
-            ))}
+          {card.place && <PlaceLink place={card.place} />}
           <ExternalLinks links={card.links} small />
         </Btns>
       )}

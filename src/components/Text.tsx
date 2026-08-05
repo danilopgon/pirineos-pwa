@@ -109,3 +109,17 @@ export function DriveButton({
 export function PlaceButton({ place }: { place: Place }) {
   return <LinkButton label={place.name} href={placeUrl(place)} ghost small />
 }
+
+/**
+ * Ficha del sitio cuando lo tenemos identificado, y ruta en coche cuando no.
+ * Los puntos con `googlePlaceId` son sitios a los que se llega andando (una
+ * cascada, un pueblo); pedir ruta hasta sus coordenadas manda al coche por
+ * accesos que no lo son.
+ */
+export function PlaceLink({ place }: { place: Place }) {
+  return place.googlePlaceId ? (
+    <PlaceButton place={place} />
+  ) : (
+    <DriveButton place={place} ghost small />
+  )
+}
