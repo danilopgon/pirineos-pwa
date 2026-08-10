@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react'
 import { labels, trip } from '../data/trip'
 import type { Link, Place } from '../data/types'
+import { useIsOnline } from '../hooks/onlineContext'
 import { md } from '../lib/content'
-import { drivingUrl, placeUrl } from '../lib/links'
+import { drivingUrl, organicMapsUrl, placeUrl } from '../lib/links'
+import { fill } from '../lib/markup'
 
 export function Paragraphs({ items }: { items?: string[] }) {
   if (!items?.length) return null
@@ -61,12 +63,22 @@ interface ButtonProps {
   href: string
   ghost?: boolean
   small?: boolean
+  /** Enlace https que no abre nada sin cobertura. */
+  needsSignal?: boolean
 }
 
-export function LinkButton({ label, href, ghost, small }: ButtonProps) {
+export function LinkButton({ label, href, ghost, small, needsSignal }: ButtonProps) {
+  const online = useIsOnline()
+  const degraded = Boolean(needsSignal) && !online
   const className = ['btn', ghost ? 'ghost' : '', small ? 'sm' : ''].filter(Boolean).join(' ')
+
   return (
-    <a className={className} href={href}>
+    <a
+      className={className}
+      href={href}
+      data-needs-signal={degraded || undefined}
+      aria-label={degraded ? `${label} — ${labels.maps.needsSignal}` : undefined}
+    >
       {label}
     </a>
   )
@@ -77,9 +89,41 @@ export function ExternalLinks({ links, small }: { links?: Link[]; small?: boolea
   return (
     <>
       {links.map((link) => (
-        <LinkButton key={link.href} label={link.label} href={link.href} ghost={link.ghost} small={small} />
+        <LinkButton
+          key={link.href}
+          label={link.label}
+          href={link.href}
+          ghost={link.ghost}
+          small={small}
+          needsSignal
+        />
       ))}
     </>
+  )
+}
+
+/**
+ * El camino que sigue funcionando en el monte. Va una sola vez por fila y
+ * carga de golpe todos los puntos de esa fila, asi que no duplica botones:
+ * en las filas de varios puntos hay menos que antes.
+ *
+ * Con cobertura acompana a Google; sin ella, pasa a ser el boton principal.
+ */
+export function OfflineMapButton({ places }: { places: Place[] }) {
+  const online = useIsOnline()
+  if (!places.length) return null
+
+  const label =
+    places.length === 1 ? labels.points.oneByOne : fill(labels.points.batch, places.length)
+
+  return (
+    <a
+      className={`btn offline-first${online ? ' sm' : ''}`}
+      href={organicMapsUrl(places)}
+      data-primary={!online}
+    >
+      {label}
+    </a>
   )
 }
 
@@ -101,13 +145,14 @@ export function DriveButton({
       href={drivingUrl(trip.origin, place)}
       ghost={ghost}
       small={small}
+      needsSignal
     />
   )
 }
 
 /** Ficha del punto en Google Maps. */
 export function PlaceButton({ place }: { place: Place }) {
-  return <LinkButton label={place.name} href={placeUrl(place)} ghost small />
+  return <LinkButton label={place.name} href={placeUrl(place)} ghost small needsSignal />
 }
 
 /**

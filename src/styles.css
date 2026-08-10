@@ -1,3 +1,5 @@
+/* Paleta clara. Todo color vive aqui: el bloque oscuro de abajo solo
+   redefine estos tokens, nunca reglas sueltas. */
 :root {
   --paper: #eceff0;
   --card: #f7f9f9;
@@ -10,11 +12,27 @@
   --alert: #b4451c;
   --alert-soft: #f7e4da;
   --crest: #6fc3ce;
+  /* Fondo de la barra pegajosa: es --paper con alfa, y tiene que cambiar
+     con el esquema igual que el resto. */
+  --nav-bg: rgba(236, 239, 240, 0.94);
+  /* La cabecera es oscura por decision, no por ser "lo contrario del fondo".
+     Con --ink/--paper se daba la vuelta sola al cambiar de esquema. */
+  --header-bg: #101d1a;
+  --header-ink: #eceff0;
+  --top-dim: #cfdcd9;
+  --eyebrow-ink: #9fb5b0;
+  /* Texto encima de un acento o del color de tinta. */
+  --on-accent: #fff;
+  /* Divulgacion neutra (acordeones). Antes compartia color con los avisos,
+     y eso hacia que "ver alternativas" pareciera una advertencia. */
+  --disclosure: var(--water);
   --sp: 16px;
   --accent: var(--water);
   /* Alto real de la barra pegajosa. Lo mide Nav.tsx: crece con el aviso de
      falta de conexion, y las anclas tienen que apartarse de el. */
   --nav-h: 61px;
+  /* Ancho de lectura comodo para parrafos largos. */
+  --measure: 68ch;
 }
 
 /* Acentos por dia y por tipo de alternativa. Mismos tres colores en ambos. */
@@ -25,6 +43,12 @@
 [data-kind='corta'] { --accent: #0f7a86; }
 [data-kind='alternativa'] { --accent: #8a5a2b; }
 [data-kind='vago'] { --accent: #6b4f8a; }
+
+/* Rampa propia de la dificultad. Es el unico sitio donde el color carga
+   significado de seguridad, asi que nunca va solo: el texto siempre esta. */
+[data-level='facil'] { --difficulty: #1f6b41; }
+[data-level='moderado'] { --difficulty: #8a5a12; }
+[data-level='exigente'] { --difficulty: #9c2f18; }
 
 * { box-sizing: border-box; }
 
@@ -68,12 +92,33 @@ button {
   cursor: pointer;
 }
 
+/* ── salto al contenido ────────────────────────────────────── */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 40;
+  background: var(--header-bg);
+  color: var(--header-ink);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 12px 16px;
+}
+.skip:focus {
+  left: 0;
+  outline: 2px solid var(--crest);
+  outline-offset: 2px;
+}
+
 /* ── cabecera ──────────────────────────────────────────────── */
 .top {
   position: relative;
   overflow: hidden;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--header-bg);
+  color: var(--header-ink);
   padding: 28px var(--sp) 24px;
   padding-top: calc(28px + env(safe-area-inset-top));
 }
@@ -98,16 +143,16 @@ button {
 .top p {
   margin: 12px 0 0;
   max-width: 34em;
-  color: #cfdcd9;
+  color: var(--top-dim);
   font-size: 15px;
 }
 
 .eyebrow {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #9fb5b0;
+  color: var(--eyebrow-ink);
   display: block;
   margin-bottom: 10px;
 }
@@ -117,24 +162,34 @@ nav {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(236, 239, 240, 0.94);
+  background: var(--nav-bg);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
+}
+/* Los chips fijos viven fuera del scroller horizontal: si estuvieran dentro
+   se irian de pantalla justo cuando hacen falta. */
+.chips-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  padding: 10px var(--sp);
 }
 .chips {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 10px var(--sp);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  /* Aviso de que hay mas contenido a la derecha. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
 }
 .chips::-webkit-scrollbar { display: none; }
-.chips a {
+.chips a,
+.chip-pin {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -144,54 +199,52 @@ nav {
   background: var(--card);
   padding: 7px 13px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .chips a[data-done='true'] {
   border-color: var(--water);
   color: var(--water);
 }
-.chips a:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+.chip-pin {
+  border-color: var(--water);
+  color: var(--water);
+  background: var(--card);
+}
+.chip-pin[data-role='resume'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.chips a:focus-visible,
+.chip-pin:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
 
 /* ── aviso de que no hay red ───────────────────────────────── */
 .offline-bar {
   display: flex;
   gap: 10px;
   align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
   padding: 8px var(--sp) 10px;
   background: var(--alert-soft);
   border-top: 1px solid var(--line);
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--ink);
 }
 .offline-bar b {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--alert);
   flex: 0 0 auto;
 }
 
 main { padding: 0 var(--sp); }
+main:focus { outline: none; }
 section { padding-top: 28px; }
 /* Sin esto, saltar por un chip deja la cabecera del dia debajo del nav. */
 section[id] { scroll-margin-top: var(--nav-h); }
-
-/* ── aviso destacado ───────────────────────────────────────── */
-.alert {
-  background: var(--alert-soft);
-  border-left: 4px solid var(--alert);
-  padding: 14px;
-  margin-top: 22px;
-}
-.alert h2 {
-  font-size: 20px;
-  text-transform: uppercase;
-  color: var(--alert);
-  margin-bottom: 6px;
-}
-.alert p { margin: 0 0 8px; font-size: 14.5px; }
-.alert p:last-child { margin-bottom: 0; }
-.alert strong { background: #fff; padding: 0 3px; }
 
 /* ── tarjeta de dia ────────────────────────────────────────── */
 .day {
@@ -206,7 +259,25 @@ section[id] { scroll-margin-top: var(--nav-h); }
 .day[data-done='true'] .day-h { box-shadow: inset 4px 0 0 var(--water); }
 .day-h .eyebrow { color: var(--slate); }
 .day-h h2 { font-size: clamp(28px, 8.5vw, 38px); text-transform: uppercase; }
-.day-h .lede { margin: 8px 0 0; font-size: 15px; color: var(--slate); }
+.day-h .lede { margin: 8px 0 0; font-size: 15px; color: var(--slate); max-width: var(--measure); }
+
+/* La pregunta con riesgo fisico va primero y en su propia fila: antes era
+   el elemento mas callado de la cabecera. */
+.difficulty {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding: 5px 10px;
+  background: var(--difficulty, var(--slate));
+  color: var(--on-accent);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.difficulty span { opacity: 0.82; font-size: 11.5px; }
+.difficulty b { font-weight: 600; }
 
 .tags {
   display: flex;
@@ -217,17 +288,12 @@ section[id] { scroll-margin-top: var(--nav-h); }
 .tag {
   display: inline-block;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   background: var(--accent);
-  color: #fff;
-  padding: 3px 7px;
-}
-.tag.plain {
-  background: transparent;
-  color: var(--slate);
-  border: 1px solid var(--line);
+  color: var(--on-accent);
+  padding: 4px 8px;
 }
 
 /* interruptor de dia hecho */
@@ -242,7 +308,7 @@ section[id] { scroll-margin-top: var(--nav-h); }
   background: transparent;
   border: 1px solid var(--line);
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 12px;
+  font-size: 12.5px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: left;
@@ -250,7 +316,7 @@ section[id] { scroll-margin-top: var(--nav-h); }
 .done[aria-pressed='true'] {
   background: var(--water);
   border-color: var(--water);
-  color: #fff;
+  color: var(--on-accent);
 }
 .done .box {
   flex: 0 0 auto;
@@ -267,16 +333,17 @@ section[id] { scroll-margin-top: var(--nav-h); }
 .chosen-note {
   margin: 10px 0 0;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--slate);
 }
 .chosen-note b { color: var(--ink); font-weight: 500; }
 
 /* ── rejilla de datos ──────────────────────────────────────── */
+/* Las lineas de 1px son el `gap` sobre el fondo --line, asi que quien lleva
+   el fondo de tarjeta son los hijos directos de la rejilla. */
 .stats {
-  list-style: none;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1px;
@@ -284,19 +351,19 @@ section[id] { scroll-margin-top: var(--nav-h); }
   padding: 0;
   background: var(--line);
 }
-.stats li { background: var(--card); padding: 10px 12px; }
-.stats b {
-  display: block;
+.stats > div { background: var(--card); padding: 10px 12px; }
+.stats dt {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--slate);
   font-weight: 500;
 }
-.stats span {
+.stats dd {
+  margin: 0;
   font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
 }
 
@@ -310,11 +377,12 @@ section[id] { scroll-margin-top: var(--nav-h); }
 }
 .profile-cap {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--slate);
-  padding: 6px 12px;
+  margin: 0;
+  padding: 7px 12px;
   border-bottom: 1px solid var(--line);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
 }
 
 /* ── cuerpo ────────────────────────────────────────────────── */
@@ -327,9 +395,9 @@ section[id] { scroll-margin-top: var(--nav-h); }
   color: var(--water);
 }
 .body h3:first-child { margin-top: 0; }
-.body p { margin: 0 0 10px; font-size: 15px; }
-.body ol, .body ul { margin: 0 0 10px; padding-left: 20px; font-size: 15px; }
-.body li { margin-bottom: 6px; }
+.body p { margin: 0 0 10px; font-size: 15px; max-width: var(--measure); }
+.body ol, .body ul { margin: 0 0 10px; padding-left: 20px; font-size: 15px; max-width: var(--measure); }
+.body li { margin-bottom: 7px; }
 .body li::marker {
   color: var(--water);
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
@@ -351,12 +419,34 @@ section[id] { scroll-margin-top: var(--nav-h); }
   text-transform: uppercase;
   padding: 12px 10px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-accent);
   border: 1px solid var(--ink);
 }
-.btn.ghost { background: transparent; color: var(--ink); }
-.btn.sm { padding: 9px 10px; font-size: 11px; min-height: 42px; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.sm { padding: 10px; font-size: 12px; min-height: 44px; }
 .btn:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+/* Enlace que necesita cobertura cuando el movil dice que no la hay. Sigue
+   siendo un enlace de verdad: si la deteccion se equivoca, el coste es el
+   aspecto, nunca dejar muerto un boton que funcionaba. */
+.btn[data-needs-signal='true'] {
+  background: transparent;
+  color: var(--slate);
+  border-color: var(--line);
+  border-style: dashed;
+}
+
+/* Boton de mapa sin conexion. Con cobertura acompana; sin ella, manda. */
+.btn.offline-first {
+  background: transparent;
+  border-color: var(--water);
+  color: var(--water);
+}
+.btn.offline-first[data-primary='true'] {
+  background: var(--water);
+  border-color: var(--water);
+  color: var(--on-accent);
+}
 
 /* ── acordeon ──────────────────────────────────────────────── */
 details {
@@ -367,10 +457,10 @@ details {
 details summary {
   cursor: pointer;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--alert);
+  color: var(--disclosure);
   /* Sin marcador nativo: el chevron es el de abajo y es el unico que gira. */
   list-style: none;
   display: flex;
@@ -400,19 +490,19 @@ details[open] summary { margin-bottom: 12px; }
 .alt:last-child { margin-bottom: 0; }
 .alt[data-chosen='true'] { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
 .alt h4 { font-size: 20px; text-transform: uppercase; margin: 6px 0 8px; }
-.alt p { margin: 0 0 8px; font-size: 14.5px; }
+.alt p { margin: 0 0 8px; font-size: 14.5px; max-width: var(--measure); }
 .alt p:last-of-type { margin-bottom: 0; }
-.alt ul { margin: 0 0 8px; padding-left: 18px; font-size: 14.5px; }
+.alt ul { margin: 0 0 8px; padding-left: 18px; font-size: 14.5px; max-width: var(--measure); }
 
 .pill {
   display: inline-block;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 3px 6px;
+  padding: 4px 8px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-accent);
 }
 .alt[data-kind] .pill { background: var(--accent); }
 
@@ -426,10 +516,10 @@ details[open] summary { margin-bottom: 12px; }
 }
 .mini li {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  letter-spacing: 0.02em;
   border: 1px solid var(--line);
-  padding: 3px 6px;
+  padding: 5px 8px;
   color: var(--slate);
 }
 .mini li strong { color: var(--ink); font-weight: 500; }
@@ -444,14 +534,14 @@ details[open] summary { margin-bottom: 12px; }
   background: transparent;
   border: 1px solid var(--line);
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .choose[aria-pressed='true'] {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .choose .box {
   flex: 0 0 auto;
@@ -465,12 +555,31 @@ details[open] summary { margin-bottom: 12px; }
 }
 .choose:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
 
+/* Salida del estado "he elegido una alternativa". Antes el unico undo era
+   volver a pulsar el boton que ya decia ELEGIDA. */
+.undo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: transparent;
+  border: 1px dashed var(--line);
+  color: var(--slate);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.undo:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
 .note {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--slate);
   border-left: 2px solid var(--line);
   padding-left: 10px;
   margin: 10px 0;
+  max-width: var(--measure);
 }
 
 /* ── bloques de texto ──────────────────────────────────────── */
@@ -488,33 +597,124 @@ details[open] summary { margin-bottom: 12px; }
   margin: 18px 0 8px;
   color: var(--water);
 }
+.block h4 { font-size: 20px; text-transform: uppercase; margin: 6px 0 8px; }
 .block p, .block li { font-size: 15px; }
-.block ul { padding-left: 20px; margin: 0 0 10px; }
-.block li { margin-bottom: 6px; }
+.block p { max-width: var(--measure); }
+.block ul { padding-left: 20px; margin: 0 0 10px; max-width: var(--measure); }
+.block li { margin-bottom: 7px; }
 .block li::marker { color: var(--water); }
+
+/* Los 18 puntos sueltos, agrupados por dia: antes era una sola fila de
+   botones identicos y no habia forma de orientarse. */
+.place-group { margin: 0 0 14px; }
+.place-group h5 {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  font-weight: 500;
+}
+
+/* ── cierre ────────────────────────────────────────────────── */
+.summary {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 20px var(--sp);
+  margin-bottom: 22px;
+  text-align: center;
+}
+.summary[data-complete='true'] { border-color: var(--water); }
+.summary .count {
+  display: block;
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-size: clamp(40px, 13vw, 56px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--water);
+}
+.summary h2 { font-size: 24px; text-transform: uppercase; margin: 8px 0 6px; }
+.summary p { margin: 0; font-size: 15px; color: var(--slate); }
+.summary .track {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+.summary .track i {
+  width: 28px;
+  height: 6px;
+  background: var(--line);
+}
+.summary .track i[data-done='true'] { background: var(--water); }
 
 footer {
   padding: 24px var(--sp) 40px;
   color: var(--slate);
-  font-size: 13px;
+  font-size: 14px;
 }
-footer p { margin: 0 0 8px; }
+footer p { margin: 0 0 8px; max-width: var(--measure); }
 
 @media (min-width: 620px) {
   .stats { grid-template-columns: repeat(4, 1fr); }
-  main { max-width: 720px; margin: 0 auto; }
+  /* Un solo margen izquierdo para cabecera, navegacion y contenido: antes
+     eran tres bandas con tres bordes distintos. */
+  main, .top-in, .chips-wrap, .offline-bar, footer > * {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .top-in, .chips-wrap, .offline-bar { width: 100%; }
   .btn { flex: 0 0 auto; min-width: 180px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   details summary::before { transition: transform 0.15s ease; }
-  .day { animation: rise 0.4s ease both; }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: none; }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+}
+
+/* ── esquema oscuro ────────────────────────────────────────── */
+/* El contenido avisa de que el movil se vacia en cuatro horas. Una pagina
+   blanca a brillo maximo en OLED es parte de ese problema. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0e1614;
+    --card: #14201d;
+    --white: #182521;
+    --ink: #e6edeb;
+    --slate: #a3b6b1;
+    --line: #2d3f3a;
+    --water: #5fc3d0;
+    --water-soft: #16302e;
+    --alert: #ff9166;
+    --alert-soft: #33201a;
+    --crest: #6fc3ce;
+    --nav-bg: rgba(14, 22, 20, 0.94);
+    /* La cabecera no se da la vuelta: solo se hunde un poco mas. */
+    --header-bg: #09100e;
+    --header-ink: #e6edeb;
+    --top-dim: #b7c9c5;
+    --eyebrow-ink: #8aa39e;
+    /* Los acentos se aclaran, asi que el texto encima se oscurece. */
+    --on-accent: #0e1614;
+  }
+
+  [data-accent='bano'] { --accent: #4fbccb; }
+  [data-accent='cultura'] { --accent: #b79ce4; }
+  [data-accent='lejos'] { --accent: #d9a978; }
+  [data-kind='corta'] { --accent: #4fbccb; }
+  [data-kind='alternativa'] { --accent: #d9a978; }
+  [data-kind='vago'] { --accent: #b79ce4; }
+
+  [data-level='facil'] { --difficulty: #6fd39a; }
+  [data-level='moderado'] { --difficulty: #e6bb72; }
+  [data-level='exigente'] { --difficulty: #ff9573; }
+
+  /* La cabecera ya era oscura; en este esquema se separa del fondo por el
+     borde, no por el contraste. */
+  .top { border-bottom: 1px solid var(--line); }
 }

@@ -4,7 +4,13 @@ import { labels, trip } from '../data/trip'
 interface Props {
   done: Record<string, boolean>
   online: boolean
+  /** Seccion donde se quedo la sesion anterior, si no es la primera. */
+  resumeId?: string
+  resumeLabel?: string
 }
+
+/** Bloque al que apunta el chip fijo: es el que hay que tener a mano. */
+const PINNED_ID = 'offline'
 
 /**
  * Publica el alto de la barra en `--nav-h`. El aviso de falta de conexion la
@@ -29,27 +35,43 @@ function useStickyHeight() {
   return ref
 }
 
-export function Nav({ done, online }: Props) {
+export function Nav({ done, online, resumeId, resumeLabel }: Props) {
   const ref = useStickyHeight()
+  const pinned = trip.blocks.find((block) => block.id === PINNED_ID)
 
   const chips = [
-    { id: trip.alert.id, label: trip.alert.short, done: false },
     ...trip.days.map((day) => ({
       id: day.id,
       label: `D${day.index} ${day.short}`,
       done: Boolean(done[day.id]),
     })),
-    ...trip.blocks.map((block) => ({ id: block.id, label: block.short, done: false })),
+    ...trip.blocks
+      .filter((block) => block.id !== pinned?.id)
+      .map((block) => ({ id: block.id, label: block.short, done: false })),
   ]
 
   return (
-    <nav ref={ref}>
-      <div className="chips">
-        {chips.map((chip) => (
-          <a key={chip.id} href={`#${chip.id}`} data-done={chip.done}>
-            {chip.label}
+    <nav ref={ref} aria-label={labels.nav.label}>
+      {/* Los chips fijos van fuera del scroller: dentro se iban de pantalla
+          justo cuando hacian falta. */}
+      <div className="chips-wrap">
+        {resumeId && (
+          <a className="chip-pin" data-role="resume" href={`#${resumeId}`}>
+            {resumeLabel ?? labels.nav.resume}
           </a>
-        ))}
+        )}
+        <div className="chips">
+          {chips.map((chip) => (
+            <a key={chip.id} href={`#${chip.id}`} data-done={chip.done}>
+              {chip.label}
+            </a>
+          ))}
+        </div>
+        {pinned && (
+          <a className="chip-pin" href={`#${pinned.id}`}>
+            {pinned.short}
+          </a>
+        )}
       </div>
       {!online && (
         <p className="offline-bar" role="status">

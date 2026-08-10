@@ -7,24 +7,36 @@ export interface TripState {
   done: Record<string, boolean>
   /** dia -> alternativa elegida (indice), o null para el plan principal */
   choice: Record<string, number>
+  /** Ultima seccion que se estuvo leyendo, para poder volver a ella. */
+  last?: string
 }
 
 const empty: TripState = { done: {}, choice: {} }
 
-function read(): TripState {
+interface Loaded {
+  state: TripState
+  /** `false` cuando el navegador no nos deja guardar: modo privado, cuota
+   *  llena o JSON corrupto. Hay que decirlo, no tragarselo. */
+  storageOk: boolean
+}
+
+function read(): Loaded {
   try {
     const raw = localStorage.getItem(KEY)
-    if (!raw) return empty
+    if (!raw) return { state: empty, storageOk: true }
     const parsed: unknown = JSON.parse(raw)
-    if (!parsed || typeof parsed !== 'object') return empty
-    const { done, choice } = parsed as Partial<TripState>
+    if (!parsed || typeof parsed !== 'object') return { state: empty, storageOk: true }
+    const { done, choice, last } = parsed as Partial<TripState>
     return {
-      done: typeof done === 'object' && done ? done : {},
-      choice: typeof choice === 'object' && choice ? choice : {},
+      state: {
+        done: typeof done === 'object' && done ? done : {},
+        choice: typeof choice === 'object' && choice ? choice : {},
+        last: typeof last === 'string' ? last : undefined,
+      },
+      storageOk: true,
     }
   } catch {
-    // Modo privado de Safari, cuota llena o JSON corrupto: se sigue sin estado.
-    return empty
+    return { state: empty, storageOk: false }
   }
 }
 
@@ -33,13 +45,15 @@ function read(): TripState {
  * despues de cerrar la app.
  */
 export function useTripState() {
-  const [state, setState] = useState<TripState>(read)
+  const [loaded] = useState(read)
+  const [state, setState] = useState<TripState>(loaded.state)
+  const [storageOk, setStorageOk] = useState(loaded.storageOk)
 
   useEffect(() => {
     try {
       localStorage.setItem(KEY, JSON.stringify(state))
     } catch {
-      /* sin persistencia, pero la sesion sigue funcionando */
+      setStorageOk(false)
     }
   }, [state])
 
@@ -56,5 +70,29 @@ export function useTripState() {
     })
   }, [])
 
-  return { state, toggleDone, chooseAlternative }
+  const clearChoice = useCallback((dayId: string) => {
+    setState((prev) => {
+      if (prev.choice[dayId] === undefined) return prev
+      const choice = { ...prev.choice }
+      delete choice[dayId]
+      return { ...prev, choice }
+    })
+  }, [])
+
+  const rememberSection = useCallback((id: string) => {
+    setState((prev) => (prev.last === id ? prev : { ...prev, last: id }))
+  }, [])
+
+  return {
+    state,
+    storageOk,
+    /** Donde se quedo la ultima sesion. Se congela al arrancar: en cuanto se
+     *  scrollea, `state.last` pasa a ser el sitio actual y ya no sirve para
+     *  ofrecer "volver a donde estabas". */
+    initialLast: loaded.state.last,
+    toggleDone,
+    chooseAlternative,
+    clearChoice,
+    rememberSection,
+  }
 }

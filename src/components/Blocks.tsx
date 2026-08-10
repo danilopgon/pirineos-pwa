@@ -1,6 +1,6 @@
 import { labels } from '../data/trip'
 import type { Block, BlockSection, InfoCard } from '../data/types'
-import { md, pointsLabel, pointsUrl, tripPlaces } from '../lib/content'
+import { md, placeGroups, pointsLabel, pointsUrl } from '../lib/content'
 import { organicMapsUrl } from '../lib/links'
 import {
   Btns,
@@ -10,6 +10,7 @@ import {
   LinkButton,
   Mini,
   Note,
+  OfflineMapButton,
   Paragraphs,
   PlaceLink,
 } from './Text'
@@ -48,6 +49,7 @@ function SectionBody({ section, install }: { section: BlockSection; install: Ins
           {section.places?.map((place) => (
             <DriveButton key={place.name} place={place} ghost small />
           ))}
+          {section.places?.length ? <OfflineMapButton places={section.places} /> : null}
           {section.widget === 'puntos' && (
             <LinkButton label={pointsLabel} href={pointsUrl} ghost />
           )}
@@ -75,6 +77,30 @@ function Install({ state }: { state: InstallState }) {
   return <Note text={state.installed ? labels.install.done : labels.install.ios} />
 }
 
+/** Los puntos uno a uno, por dia. Todos son om://: abren sin cobertura. */
+function PlacesByDay() {
+  return (
+    <>
+      {placeGroups.map((group) => (
+        <div className="place-group" key={group.key}>
+          <h5>{group.heading}</h5>
+          <Btns>
+            {group.items.map(({ place, label }) => (
+              <LinkButton
+                key={place.name}
+                label={label}
+                href={organicMapsUrl([place])}
+                ghost
+                small
+              />
+            ))}
+          </Btns>
+        </div>
+      ))}
+    </>
+  )
+}
+
 function Card({ card }: { card: InfoCard }) {
   return (
     <div className="alt" data-kind={card.kind}>
@@ -82,23 +108,12 @@ function Card({ card }: { card: InfoCard }) {
       <h4>{card.title}</h4>
       <Mini items={card.mini ?? []} />
       <Paragraphs items={card.body} />
-      {card.widget === 'puntos-uno-a-uno' && (
-        <Btns>
-          {tripPlaces.map((place) => (
-            <LinkButton
-              key={place.name}
-              label={place.name}
-              href={organicMapsUrl([place])}
-              ghost
-              small
-            />
-          ))}
-        </Btns>
-      )}
+      {card.widget === 'puntos-uno-a-uno' && <PlacesByDay />}
       {(card.place || card.links?.length) && (
         <Btns>
           {card.place && <PlaceLink place={card.place} />}
           <ExternalLinks links={card.links} small />
+          {card.place && <OfflineMapButton places={[card.place]} />}
         </Btns>
       )}
       <Note text={card.note} />

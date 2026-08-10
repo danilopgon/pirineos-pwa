@@ -14,17 +14,6 @@ export const trip: Trip = {
     'Cinco días de senderismo con base en Benasque, todo llegando en coche propio. Un día cultural, un día con baño en ibón y una escapada al Parque Nacional. Cada día lleva su versión corta y su alternativa, con los mismos datos que el plan principal.',
   origin: 'Benasque',
 
-  alert: {
-    id: 'aviso',
-    short: '⚠ Leer primero',
-    title: 'Lo que condiciona todo el viaje',
-    body: [
-      'En verano hay tres valles del Parque Natural Posets-Maladeta cerrados al coche particular: **La Besurta, Vallibierna y Espigantosa**, del **20 de junio al 13 de septiembre de 2026**. Solo se entra en autobús lanzadera, en taxi o andando.',
-      'En el Parque Nacional de Ordesa pasa lo mismo: del 19 de junio al 20 de septiembre la **Pradera de Ordesa** está cerrada al coche particular y se entra en lanzadera desde Torla o a pie por el Turieto.',
-      'Traducción: sin autobús quedan fuera el Aneto por la cara norte, los Ibones de Coronas, la cascada de Espigantosa y el Ordesa "de postal" (a la Pradera se sube a pie desde Torla por el Turieto, pero son unas 2 h por sentido antes de empezar la ruta). Al parking del Vado / Llanos del Hospital sí se llega en coche, y de ahí se sigue a pie. Ordesa se sustituye por Añisclo, que es el mismo parque nacional y admite coche. Todo el plan está construido con esa regla.',
-    ],
-  },
-
   days: [
     // ─────────────────────────────────────────── DÍA 1
     {
@@ -866,6 +855,8 @@ export const labels = {
     ascent: 'Desnivel',
     hours: 'Tiempo',
     drive: 'Coche',
+    /** Para los datos sueltos que llegan sin etiqueta propia. */
+    other: 'Dato',
   },
   difficulty: {
     facil: 'Fácil',
@@ -884,13 +875,19 @@ export const labels = {
     routeTo: 'Ruta a',
     altSummary: 'Versión corta y alternativas de este día',
     profileCaption: 'perfil orientativo',
+    steepest: 'el tramo más duro sube',
     dayPrefix: 'Día',
+    difficultyLabel: 'Dificultad',
     done: 'Hecho',
     markDone: 'Marcar como hecho',
     chosen: 'Elegida',
     choose: 'Elegir esta',
     chosenPrefix: 'Elegido:',
     mainPlan: 'Plan principal',
+    backToMainPlan: 'Volver al plan principal',
+  },
+  maps: {
+    needsSignal: 'Necesita cobertura',
   },
   offline: {
     title: 'Sin conexión',
@@ -904,6 +901,24 @@ export const labels = {
   points: {
     load: 'Cargar los {n} puntos',
     oneByOne: 'Abrir en Organic Maps',
+    batch: 'Los {n} puntos en Organic Maps',
+    /** Agrupacion de la lista larga de puntos sueltos. */
+    dayGroup: 'Día {n}',
+    otherGroup: 'Pueblos y servicios',
+  },
+  nav: {
+    label: 'Secciones de la guía',
+    resume: 'Volver a donde estabas',
+  },
+  storage: {
+    unavailable:
+      'Este navegador no deja guardar nada (modo privado o almacenamiento lleno). Lo que marques se perderá al cerrar la guía.',
+  },
+  summary: {
+    heading: 'El viaje',
+    progress: 'días marcados como hechos',
+    none: 'Todavía no has marcado ningún día. Se marcan desde la cabecera de cada uno.',
+    complete: 'Enteros los cinco. Se acabó, y lo hicisteis todo.',
   },
   skipToContent: 'Ir al contenido',
 } as const

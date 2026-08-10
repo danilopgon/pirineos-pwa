@@ -9,6 +9,7 @@ import {
   DriveButton,
   ExternalLinks,
   Note,
+  OfflineMapButton,
   Paragraphs,
   PlaceButton,
   Steps,
@@ -20,9 +21,10 @@ interface Props {
   chosen?: number
   onToggleDone: () => void
   onChoose: (index: number) => void
+  onClearChoice: () => void
 }
 
-export function DayCard({ day, done, chosen, onToggleDone, onChoose }: Props) {
+export function DayCard({ day, done, chosen, onToggleDone, onChoose, onClearChoice }: Props) {
   const [main, ...rest] = day.places
   const chosenAlt = chosen === undefined ? undefined : day.alternatives[chosen]
 
@@ -35,25 +37,37 @@ export function DayCard({ day, done, chosen, onToggleDone, onChoose }: Props) {
           </span>
           <h2>{day.title}</h2>
           <p className="lede">{day.lede}</p>
+          <p className="difficulty" data-level={day.difficulty}>
+            <span>{labels.day.difficultyLabel}</span>
+            <b>{labels.difficulty[day.difficulty]}</b>
+          </p>
           <div className="tags">
             {day.tags.map((tag) => (
               <span className="tag" key={tag}>
                 {tag}
               </span>
             ))}
-            <span className="tag plain">{labels.difficulty[day.difficulty]}</span>
           </div>
-          <button type="button" className="done" aria-pressed={done} onClick={onToggleDone}>
+          <button
+            type="button"
+            className="done"
+            aria-pressed={done}
+            aria-label={`${done ? labels.day.done : labels.day.markDone}: ${day.title}`}
+            onClick={onToggleDone}
+          >
             <span className="box" aria-hidden="true">
               {done ? '✓' : ''}
             </span>
             {done ? labels.day.done : labels.day.markDone}
           </button>
-          {chosenAlt && (
-            <p className="chosen-note">
-              {labels.day.chosenPrefix} <b>{chosenAlt.title}</b>
-            </p>
-          )}
+          {/* El cambio se anuncia: antes aparecia sin que nadie se enterara. */}
+          <div role="status">
+            {chosenAlt && (
+              <p className="chosen-note">
+                {labels.day.chosenPrefix} <b>{chosenAlt.title}</b>
+              </p>
+            )}
+          </div>
         </div>
 
         <StatsGrid stats={day.stats} />
@@ -67,6 +81,7 @@ export function DayCard({ day, done, chosen, onToggleDone, onChoose }: Props) {
               {main && <DriveButton place={main} label={labels.day.driveHere} />}
               {main?.googlePlaceId && <PlaceButton place={main} />}
               <ExternalLinks links={day.accessLinks} />
+              {main && <OfflineMapButton places={[main]} />}
             </Btns>
           )}
           <Note text={day.accessNote} />
@@ -78,6 +93,7 @@ export function DayCard({ day, done, chosen, onToggleDone, onChoose }: Props) {
               {rest.map((place) => (
                 <PlaceButton key={place.name} place={place} />
               ))}
+              <OfflineMapButton places={rest} />
             </Btns>
           )}
           <Note text={day.routeNote} />
@@ -92,13 +108,19 @@ export function DayCard({ day, done, chosen, onToggleDone, onChoose }: Props) {
                   {section.places.map((place) => (
                     <DriveButton key={place.name} place={place} ghost small />
                   ))}
+                  <OfflineMapButton places={section.places} />
                 </Btns>
               ) : null}
               <Note text={section.note} />
             </div>
           ))}
 
-          <Alternatives day={day} chosen={chosen} onChoose={onChoose} />
+          <Alternatives
+            day={day}
+            chosen={chosen}
+            onChoose={onChoose}
+            onClearChoice={onClearChoice}
+          />
         </div>
       </article>
     </section>

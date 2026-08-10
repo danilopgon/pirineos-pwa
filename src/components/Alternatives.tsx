@@ -1,15 +1,16 @@
 import { labels } from '../data/trip'
 import type { Alternative, Day } from '../data/types'
 import { miniItems } from '../lib/format'
-import { Btns, Mini, Note, Paragraphs, PlaceLink } from './Text'
+import { Btns, Mini, Note, OfflineMapButton, Paragraphs, PlaceLink } from './Text'
 
 interface Props {
   day: Day
   chosen?: number
   onChoose: (index: number) => void
+  onClearChoice: () => void
 }
 
-export function Alternatives({ day, chosen, onChoose }: Props) {
+export function Alternatives({ day, chosen, onChoose, onClearChoice }: Props) {
   if (!day.alternatives.length) return null
 
   return (
@@ -23,6 +24,13 @@ export function Alternatives({ day, chosen, onChoose }: Props) {
           onChoose={() => onChoose(i)}
         />
       ))}
+      {/* Salida explicita del estado elegido: volver a pulsar un boton que ya
+          dice ELEGIDA no se lee como "deshacer". */}
+      {chosen !== undefined && (
+        <button type="button" className="undo" onClick={onClearChoice}>
+          {labels.day.backToMainPlan}
+        </button>
+      )}
     </details>
   )
 }
@@ -47,11 +55,18 @@ function AltCard({
         <>
           <Btns>
             <PlaceLink place={alt.place} />
+            <OfflineMapButton places={[alt.place]} />
           </Btns>
           <Note text={alt.place.note} />
         </>
       )}
-      <button type="button" className="choose" aria-pressed={chosen} onClick={onChoose}>
+      <button
+        type="button"
+        className="choose"
+        aria-pressed={chosen}
+        aria-label={`${chosen ? labels.day.chosen : labels.day.choose}: ${alt.title}`}
+        onClick={onChoose}
+      >
         <span className="box" aria-hidden="true">
           {chosen ? '✓' : ''}
         </span>

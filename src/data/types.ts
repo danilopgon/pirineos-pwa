@@ -127,13 +127,6 @@ export interface BlockSection {
   widget?: 'instalar' | 'puntos'
 }
 
-export interface Alert {
-  id: string
-  short: string
-  title: string
-  body: string[]
-}
-
 export interface Trip {
   eyebrow: string
   title: string
@@ -141,7 +134,6 @@ export interface Trip {
   intro: string
   /** Origen de todas las rutas en coche. */
   origin: string
-  alert: Alert
   days: Day[]
   blocks: Block[]
   footer: string[]
