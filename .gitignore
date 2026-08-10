@@ -6,3 +6,4 @@ dev-dist
 .atl/
 .impeccable/
 bash.exe.stackdump
+/PLAN.md
