@@ -1422,7 +1422,10 @@ const activities: Activity[] = [
       'Subir a **Cerler**, a 6 km de Benasque y 1.500 m, el pueblo habitado más alto del Pirineo aragonés. Se ve en una hora; después se decide allí si se continúa al Ampriu. El tiempo total es aproximado y cambia con las paradas.',
     ],
     places: [{ name: 'Ampriu', lat: 42.5611815, lng: 0.5695076 }],
-    affinities: [{ activityId: 'ardones', weight: 2, reason: 'Comparten la carretera de Cerler.' }],
+    affinities: [
+      { activityId: 'ardones', weight: 2, reason: 'Comparten la carretera de Cerler.' },
+      { activityId: 'benasque-anciles', weight: 2, reason: 'La subida completa el paseo de Benasque y Anciles.' },
+    ],
   },
 ]
 
@@ -1664,6 +1667,15 @@ export const labels = {
   },
   maps: {
     needsSignal: 'Necesita cobertura',
+  },
+  suggestionReasons: {
+    'same-area': 'En la misma zona',
+    nearby: 'Queda cerca',
+    'explicit-affinity': 'Combinación recomendada',
+    'low-effort': 'Pide pocas piernas',
+    short: 'Plan corto',
+    'easy-after': 'Fácil de combinar',
+    'afternoon-fit': 'Cabe después',
   },
   offline: {
     title: 'Sin conexión',
