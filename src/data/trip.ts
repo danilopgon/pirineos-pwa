@@ -1,4 +1,4 @@
-import type { Trip } from './types'
+import type { Activity, ActivityVariant, Alternative, Block, Day, InfoBlock, Trip } from './types'
 
 /**
  * Fuente unica de contenido. Los componentes no llevan texto propio.
@@ -6,7 +6,7 @@ import type { Trip } from './types'
  * En los parrafos, `**negrita**` y `` `codigo` `` se renderizan como marcado
  * en linea (ver src/lib/markup.tsx). No se interpreta HTML.
  */
-export const trip: Trip = {
+const legacyTrip: Omit<Trip, 'activities' | 'infoBlocks'> = {
   eyebrow: 'Benasque · 5 días completos · agosto 2026',
   title: 'Pirineos',
   titleAccent: 'sin bus',
@@ -847,6 +847,273 @@ export const trip: Trip = {
     'Los perfiles de altitud son esquemas orientativos, no datos GPS.',
   ],
 }
+
+const [aiguallutsDay, batisiellesDay, rodaDay, aniscloDay, llausetDay] = legacyTrip.days as [Day, Day, Day, Day, Day]
+const [vagosBlock, eatingBlock, offlineBlock, practicalBlock] = legacyTrip.blocks as [Block, Block, Block, Block]
+
+function alt(day: Day, index: number): Alternative {
+  return day.alternatives[index]!
+}
+
+// La copia conserva el detalle mientras conviven las dos interfaces.
+function primaryActivity(
+  day: Day,
+  meta: Pick<Activity, 'id' | 'area' | 'areaLabel' | 'category' | 'effort' | 'duration' | 'combinability'>,
+  variants: ActivityVariant[],
+  affinities?: Activity['affinities'],
+): Activity {
+  return {
+    ...meta,
+    title: day.title,
+    short: day.short,
+    tags: day.tags,
+    stats: day.stats,
+    lede: day.lede,
+    accessHeading: day.accessHeading,
+    access: day.access,
+    accessLinks: day.accessLinks,
+    accessNote: day.accessNote,
+    routeHeading: day.routeHeading,
+    route: day.route,
+    routeNote: day.routeNote,
+    sections: day.sections,
+    places: day.places,
+    elevationProfile: day.elevationProfile,
+    variants,
+    affinities,
+  }
+}
+
+function variant(id: string, alternative: Alternative): ActivityVariant {
+  return {
+    id,
+    title: alternative.title,
+    label: alternative.label,
+    stats: alternative.stats,
+    summary: alternative.body,
+    note: alternative.note,
+    places: alternative.place ? [alternative.place] : undefined,
+  }
+}
+
+function promoted(
+  id: string,
+  alternative: Alternative,
+  meta: Pick<Activity, 'area' | 'areaLabel' | 'category' | 'effort' | 'duration' | 'combinability' | 'tags'>,
+  affinities?: Activity['affinities'],
+): Activity {
+  return {
+    id,
+    title: alternative.title,
+    ...meta,
+    stats: alternative.stats,
+    sections: [{ heading: 'El plan', body: alternative.body, note: alternative.note }],
+    places: alternative.place ? [alternative.place] : undefined,
+    affinities,
+  }
+}
+
+const activities: Activity[] = [
+  primaryActivity(aiguallutsDay, {
+    id: 'aigualluts', area: 'llanos-hospital', areaLabel: 'Llanos del Hospital', category: 'montana',
+    effort: 'medio', duration: 'dia-completo', combinability: 'standalone',
+  }, [variant('la-besurta', alt(aiguallutsDay, 0))]),
+  promoted('gorgutes-glera', alt(aiguallutsDay, 1), {
+    area: 'llanos-hospital', areaLabel: 'Llanos del Hospital', category: 'montana', effort: 'medio',
+    duration: 'media-jornada', combinability: 'normal', tags: ['Ibón', 'Tormenta por la tarde'],
+  }),
+  promoted('gorgas-alba', alt(aiguallutsDay, 2), {
+    area: 'benasque', areaLabel: 'Valle de Benasque', category: 'agua', effort: 'bajo',
+    duration: 'corta', combinability: 'facil', tags: ['Cascadas', 'Sendero botánico'],
+  }, [{ activityId: 'banos-benasque', weight: 3, reason: 'Están a un kilómetro.' }]),
+
+  primaryActivity(batisiellesDay, {
+    id: 'batisielles', area: 'estos', areaLabel: 'Valle de Estós', category: 'agua', effort: 'alto',
+    duration: 'dia-completo', combinability: 'standalone',
+  }, [
+    variant('ibonet', alt(batisiellesDay, 0)),
+    variant('ibon-gran', alt(batisiellesDay, 2)),
+  ]),
+  promoted('valle-estos', alt(batisiellesDay, 1), {
+    area: 'estos', areaLabel: 'Valle de Estós', category: 'paseo', effort: 'bajo',
+    duration: 'dia-completo', combinability: 'normal', tags: ['Hayedo', 'Refugio'],
+  }),
+
+  primaryActivity(rodaDay, {
+    id: 'roda-isabena', area: 'ribagorza', areaLabel: 'Ribagorza', category: 'cultura', effort: 'muy-bajo',
+    duration: 'dia-completo', combinability: 'normal',
+  }, [], [{ activityId: 'ainsa', weight: 1, reason: 'Encaja si se acepta más coche.' }]),
+  promoted('ainsa', alt(rodaDay, 0), {
+    area: 'ainsa', areaLabel: 'Aínsa', category: 'cultura', effort: 'muy-bajo',
+    duration: 'dia-completo', combinability: 'normal', tags: ['Casco medieval', 'Plan de lluvia'],
+  }),
+  promoted('vall-boi', alt(rodaDay, 1), {
+    area: 'boi', areaLabel: 'Vall de Boí', category: 'cultura', effort: 'muy-bajo',
+    duration: 'dia-completo', combinability: 'standalone', tags: ['Románico', 'UNESCO'],
+  }),
+  {
+    ...promoted('benasque-anciles', alt(rodaDay, 2), {
+      area: 'benasque', areaLabel: 'Benasque y Anciles', category: 'pueblos', effort: 'muy-bajo',
+      duration: 'corta', combinability: 'facil', tags: ['Sin coche', 'Casi llano'],
+    }, [{ activityId: 'cerler-ampriu', weight: 2, reason: 'Cerler queda como salida propia, no dentro del paseo.' }]),
+    sections: [{
+      heading: 'El plan',
+      body: ['Casco antiguo de Benasque (iglesia de San Marcial, palacio de los condes de Ribagorza, casas blasonadas), paseo llano de dos kilómetros hasta **Anciles** y vuelta.'],
+    }],
+  },
+
+  primaryActivity(aniscloDay, {
+    id: 'anisclo', area: 'anisclo', areaLabel: 'Cañón de Añisclo', category: 'montana', effort: 'medio',
+    duration: 'dia-completo', combinability: 'standalone',
+  }, [
+    variant('cumaz-selva-plana', alt(aniscloDay, 0)),
+    {
+      id: 'san-urbez', title: alt(aniscloDay, 1).title, label: alt(aniscloDay, 1).label,
+      stats: alt(aniscloDay, 1).stats,
+      summary: ['Puente medieval altísimo, ermita metida en la roca y molino. Con 45 minutos de caminata no compensa el viaje por sí solo: es la versión mínima para cuando el cañón se hace sobre todo en coche.'],
+    },
+    {
+      id: 'fuenblanca', title: 'Fuenblanca', label: 'Versión larga',
+      stats: { hours: '5 de ida', extra: [{ value: 'Día entero' }, { value: 'Salida de noche' }] },
+      summary: ['La **cascada de Fuenblanca**, siguiendo Añisclo más allá de La Ripareta, son 5 h de ida. Exige salir de Benasque de noche y aceptar que el día se va entero.'],
+      note: 'No confundirla con una prolongación pequeña de La Ripareta: son cinco horas solo para llegar.',
+    },
+  ]),
+  {
+    id: 'pueblos-vio', title: 'Ruta panorámica de Vió, Buerba y Fanlo', area: 'anisclo',
+    areaLabel: 'Valle de Vió', category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada',
+    combinability: 'facil', tags: ['En coche', 'Sin caminata fija'],
+    sections: [{
+      heading: 'El plan',
+      body: ['La propia HU-631 por el fondo del cañón es el espectáculo. Se vuelve por la carretera que lo bordea, parando en **Vió, Buerba y Fanlo**, pueblos de piedra medio despoblados. Si apetece andar algo, se puede sumar la ruta del agua de San Úrbez; si no, se cierra comiendo en Aínsa.'],
+    }],
+    affinities: [{ activityId: 'ainsa', weight: 2, reason: 'Se puede cerrar comiendo allí.' }],
+  },
+  {
+    id: 'llanos-larri', title: 'Valle de Pineta: Llanos de la Larri', area: 'pineta', areaLabel: 'Valle de Pineta',
+    category: 'montana', effort: 'medio', duration: 'media-jornada', combinability: 'normal',
+    tags: ['Hayedo', 'Cascadas'], stats: alt(aniscloDay, 2).stats,
+    sections: [{ heading: 'El plan', body: alt(aniscloDay, 2).body }],
+    places: alt(aniscloDay, 2).place ? [alt(aniscloDay, 2).place!] : undefined,
+    variants: [{
+      id: 'balcon-pineta', title: 'Balcón de Pineta', label: 'Versión dura',
+      stats: { hours: '7-8', ascentM: 1300, extra: [{ value: 'Duro' }, { value: 'Salida de noche' }] },
+      summary: ['Desde el mismo parking de Pineta, es uno de los desniveles más brutos del Pirineo aragonés, con el lago de Marboré arriba. Exige salir de Benasque de noche y aceptar que el día se va entero.'],
+      note: 'No es la Larri con un poco más de subida: es una jornada dura de alta montaña.',
+    }],
+    affinities: [{ activityId: 'bielsa-chistau', weight: 1, reason: 'Bielsa queda en el mismo lado del viaje.' }],
+  },
+
+  primaryActivity(llausetDay, {
+    id: 'llauset-anglios', area: 'llauset', areaLabel: 'Llauset', category: 'montana', effort: 'alto',
+    duration: 'dia-completo', combinability: 'standalone',
+  }, [variant('refugio', alt(llausetDay, 0)), variant('estanys', alt(llausetDay, 1))]),
+  promoted('ardones', alt(llausetDay, 2), {
+    area: 'cerler', areaLabel: 'Cerler', category: 'agua', effort: 'bajo', duration: 'media-jornada',
+    combinability: 'facil', tags: ['Cascadas', 'Dos longitudes'],
+  }, [{ activityId: 'cerler-ampriu', weight: 2, reason: 'Comparten la subida a Cerler.' }]),
+  {
+    ...promoted('picos-cerler-gallinero', alt(llausetDay, 3), {
+      area: 'cerler', areaLabel: 'Ampriu', category: 'montana', effort: 'alto', duration: 'media-jornada',
+      combinability: 'normal', tags: ['Cima', 'Confirmar telesilla'],
+    }),
+    variants: [
+      { id: 'pico-cerler', title: 'Pico Cerler', stats: { distanceKm: 6.4, ascentM: 523, hours: '3 h 30' }, summary: ['La pirámide de 2.407 m que se ve desde el pueblo. Si funciona el telesilla del Amor, quedan unos 95 m de desnivel; confirmad horarios antes de contar con él.'] },
+      { id: 'gallinero', title: 'Gallinero', stats: { distanceKm: 7, ascentM: 860, hours: '3 h 45' }, summary: ['Cima de 2.728 m con una de las mejores panorámicas del valle. Es la opción que conserva una subida seria.'] },
+    ],
+  },
+
+  {
+    id: 'banos-benasque', title: 'Pozas termales de los Baños de Benasque', area: 'benasque',
+    areaLabel: 'Baños de Benasque', category: 'relax', effort: 'muy-bajo', duration: 'corta',
+    combinability: 'facil', tags: ['Agua termal', 'Gratis'],
+    sections: [{ ...vagosBlock.sections[0]!, heading: 'Antes de ir' }],
+    places: vagosBlock.sections[0]!.places,
+    affinities: [{ activityId: 'gorgas-alba', weight: 3, reason: 'Salen de aparcamientos contiguos.' }],
+  },
+  {
+    id: 'spa-benasque', title: 'Spa de pago, sin salir del pueblo', area: 'benasque', areaLabel: 'Benasque',
+    category: 'relax', effort: 'muy-bajo', duration: 'corta', combinability: 'facil', tags: ['Reserva previa'],
+    sections: [{ ...vagosBlock.sections[1]!, heading: 'Antes de reservar' }],
+  },
+  {
+    id: 'bielsa-chistau', title: 'Bielsa y el valle de Chistau', area: 'bielsa-chistau', areaLabel: 'Bielsa y Chistau',
+    category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil', tags: ['En coche', 'Pueblos'],
+    sections: [{ ...vagosBlock.sections[2]!, heading: 'El plan' }],
+  },
+  {
+    id: 'paso-nuevo', title: 'Embalse de Paso Nuevo y presa de Benasque', area: 'benasque', areaLabel: 'Valle de Benasque',
+    category: 'paseo', effort: 'muy-bajo', duration: 'corta', combinability: 'facil', tags: ['Paseo corto', 'Junto al Ésera'],
+    sections: [{ heading: 'El plan', body: ['A diez minutos en coche de Benasque, un paseo corto junto al Ésera para un rato sin piernas. No hace falta convertirlo en ruta: se anda lo que apetezca y se vuelve.'] }],
+  },
+  {
+    id: 'congosto-ventamillo', title: 'Congosto de Ventamillo', area: 'ribagorza', areaLabel: 'Ribagorza',
+    category: 'paseo', effort: 'muy-bajo', duration: 'corta', combinability: 'facil', tags: ['Casi desde el coche'],
+    sections: [{ heading: 'El plan', body: ['Tres kilómetros de carretera encajonada entre paredes calizas verticales. Hay dónde dejar el coche y asomarse; es una parada, no una excursión.'] }],
+    places: [rodaDay.places[1]!],
+  },
+
+  // Las cifras del encargo son orientativas; aqui no se endurecen como datos GPS.
+  {
+    id: 'benasque-eriste', title: 'Benasque–Eriste', area: 'benasque', areaLabel: 'Benasque y Eriste',
+    category: 'paseo', effort: 'bajo', duration: 'media-jornada', combinability: 'facil', tags: ['Paseo de valle', 'Cifras aproximadas'],
+    lede: 'Un paseo de fondo de valle para seguir moviéndose sin pedirle al día una cima.',
+    route: ['Salir desde Benasque hacia Eriste por el corredor del valle y volver por el mismo trazado si no apetece alargar. Las distancias y el tiempo son aproximados: comprobad el trazado antes de salir.'],
+  },
+  {
+    id: 'eriste-anciles', title: 'Eriste–Anciles', area: 'benasque', areaLabel: 'Eriste y Anciles',
+    category: 'paseo', effort: 'bajo', duration: 'media-jornada', combinability: 'facil', tags: ['Paseo de valle', 'Cifras aproximadas'],
+    lede: 'La carta tranquila entre dos pueblos, sin mezclarla con el paseo urbano de Benasque.',
+    route: ['Unir Eriste y Anciles a ritmo de paseo y dejar margen para parar en los pueblos. El tiempo y la distancia son aproximados; llevad el recorrido comprobado.'],
+  },
+  {
+    id: 'linsoles-guayente-sahun', title: 'Linsoles, Guayente y Sahún', area: 'solano', areaLabel: 'Solano',
+    category: 'pueblos', effort: 'bajo', duration: 'media-jornada', combinability: 'facil', tags: ['Pueblos', 'Cifras aproximadas'],
+    lede: 'Tres paradas cercanas para un día de pueblos sin encadenar horas de coche.',
+    route: ['Montar el recorrido con Linsoles, Guayente y Sahún como paradas flexibles. Los tiempos son aproximados: si hoy no están las piernas, se recorta sin perder el sentido del plan.'],
+  },
+  {
+    id: 'pueblos-solano', title: 'Pueblos del Solano', area: 'solano', areaLabel: 'Solano',
+    category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil', tags: ['En coche', 'Cifras aproximadas'],
+    lede: 'Una vuelta de pueblos para el día que pide carretera corta y paradas, no una ruta cerrada.',
+    route: ['Elegir las paradas según el cuerpo y la hora. La duración es aproximada y depende de cuánto os entretengáis en cada pueblo.'],
+  },
+  {
+    id: 'cerler-ampriu', title: 'Cerler y Ampriu', area: 'cerler', areaLabel: 'Cerler',
+    category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil', tags: ['En coche', 'Cifras aproximadas'],
+    lede: 'Cerler deja de fingir que cabe en el paseo Benasque–Anciles: es su propia subida, con Ampriu como continuación si apetece.',
+    route: ['Subir a **Cerler**, a 6 km de Benasque y 1.500 m, el pueblo habitado más alto del Pirineo aragonés. Se ve en una hora; después se decide allí si se continúa al Ampriu. El tiempo total es aproximado y cambia con las paradas.'],
+    places: alt(llausetDay, 3).place ? [alt(llausetDay, 3).place!] : undefined,
+    affinities: [{ activityId: 'ardones', weight: 2, reason: 'Comparten la carretera de Cerler.' }],
+  },
+]
+
+const infoBlocks: InfoBlock[] = [
+  {
+    id: 'eating', title: eatingBlock.title, intro: eatingBlock.intro,
+    sections: eatingBlock.sections.map((section, index) => ({
+      ...section,
+      id: ['benasque', 'ainsa', 'refuges'][index] ?? `eating-${index}`,
+      heading: index === 1 ? 'Cerca de Aínsa' : section.heading,
+      cards: section.cards?.map((card, cardIndex) => ({ ...card, id: `eating-${index}-${cardIndex}` })),
+    })),
+  },
+  {
+    id: 'offline', title: offlineBlock.title, intro: offlineBlock.intro,
+    sections: offlineBlock.sections.map((section, index) => ({
+      ...section, id: ['install', 'points-batch', 'points-detail', 'downloads', 'gpx-sources', 'gpx-import', 'checklist'][index] ?? `offline-${index}`,
+      cards: section.cards?.map((card, cardIndex) => ({ ...card, id: `offline-${index}-${cardIndex}` })),
+    })),
+  },
+  {
+    id: 'practical', title: practicalBlock.title, intro: practicalBlock.intro,
+    sections: practicalBlock.sections.map((section, index) => ({
+      ...section, id: ['schedules', 'dates', 'packing', 'safety', 'reconfirm'][index] ?? `practical-${index}`,
+    })),
+  },
+]
+
+export const trip: Trip = { ...legacyTrip, activities, infoBlocks }
 
 /** Todo el texto de interfaz. Los componentes no escriben literales. */
 export const labels = {

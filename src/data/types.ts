@@ -249,7 +249,10 @@ export interface Trip {
   intro: string
   /** Origen de todas las rutas en coche. */
   origin: string
+  // Temporal: la UI antigua aun consume dias y bloques completos.
   days: Day[]
   blocks: Block[]
+  activities: Activity[]
+  infoBlocks: InfoBlock[]
   footer: string[]
 }
