@@ -4,6 +4,8 @@ import { StatsGrid } from './Stats'
 
 interface ActivityCardProps {
   activity: Activity
+  currentDayIndex: number
+  headingLevel?: 'h3' | 'h4'
   isAdded: boolean
   onAdd: (activityId: ActivityId) => void
   onRemove: (activityId: ActivityId) => void
@@ -12,12 +14,15 @@ interface ActivityCardProps {
 
 export function ActivityCard({
   activity,
+  currentDayIndex,
+  headingLevel = 'h3',
   isAdded,
   onAdd,
   onRemove,
   onOpen,
 }: ActivityCardProps) {
   const titleId = `activity-${activity.id}-title`
+  const Heading = headingLevel
 
   return (
     <article
@@ -28,7 +33,7 @@ export function ActivityCard({
       aria-labelledby={titleId}
     >
       <header className="activity-card__header">
-        <h3 id={titleId}>{activity.title}</h3>
+        <Heading id={titleId}>{activity.title}</Heading>
         <p>
           <span>{labels.activity.area}</span> {activity.areaLabel}
         </p>
@@ -55,7 +60,9 @@ export function ActivityCard({
 
       {activity.stats && <StatsGrid stats={activity.stats} />}
 
-      {isAdded && <p className="activity-card__added">{labels.catalogue.added}</p>}
+      {isAdded && (
+        <p className="activity-card__added">{labels.catalogue.added(currentDayIndex)}</p>
+      )}
 
       <div className="activity-card__actions btns">
         <button
@@ -70,7 +77,7 @@ export function ActivityCard({
           <button
             type="button"
             className="btn"
-            aria-label={labels.catalogue.removeActivity(activity.title)}
+            aria-label={labels.catalogue.removeActivity(activity.title, currentDayIndex)}
             onClick={() => onRemove(activity.id)}
           >
             {labels.catalogue.remove}
@@ -79,10 +86,10 @@ export function ActivityCard({
           <button
             type="button"
             className="btn"
-            aria-label={labels.catalogue.addActivity(activity.title)}
+            aria-label={labels.catalogue.addActivity(activity.title, currentDayIndex)}
             onClick={() => onAdd(activity.id)}
           >
-            {labels.catalogue.add}
+            {labels.catalogue.add(currentDayIndex)}
           </button>
         )}
       </div>

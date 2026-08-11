@@ -29,12 +29,12 @@ export function InfoView({
   return (
     <section className="info-view" aria-labelledby="info-heading">
       <header className="info-view__header">
-        <h2 id="info-heading">{labels.info.heading}</h2>
+        <h2 className="visually-hidden" id="info-heading">{labels.info.heading}</h2>
         <p>{labels.info.intro}</p>
       </header>
       {blocks.map((block) => (
         <article className="block" key={block.id} aria-labelledby={`info-${block.id}`}>
-          <h2 id={`info-${block.id}`}>{block.title}</h2>
+          <h3 id={`info-${block.id}`}>{block.title}</h3>
           <Note text={block.intro} />
           {block.sections.map((section) => (
             <SectionBody key={section.id} section={section} install={install} />
@@ -50,7 +50,7 @@ function SectionBody({ section, install }: { section: InfoSection; install: Inst
 
   return (
     <div className="info-section">
-      {section.heading && <h3>{md(section.heading)}</h3>}
+      {section.heading && <h4>{md(section.heading)}</h4>}
       <Paragraphs items={section.body} />
       <Bullets items={section.list} />
       {hasRow && (
@@ -93,7 +93,7 @@ function PlacesByGroup() {
     <>
       {placeGroups.map((group) => (
         <div className="place-group" key={group.key}>
-          <h5>{group.heading}</h5>
+          <h6>{group.heading}</h6>
           <Btns>
             {group.items.map(({ place, label }) => (
               <OfflineMapButton key={place.name} places={[place]} label={label} />
@@ -109,7 +109,7 @@ function Card({ card }: { card: InfoCard }) {
   return (
     <div className="info-card">
       <span className="info-card__label">{card.label}</span>
-      <h4>{card.title}</h4>
+      <h5>{card.title}</h5>
       <Mini items={card.mini ?? []} />
       <Paragraphs items={card.body} />
       {card.widget === 'puntos-uno-a-uno' && <PlacesByGroup />}

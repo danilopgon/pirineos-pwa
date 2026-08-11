@@ -17,6 +17,7 @@ import {
 
 interface ActivityDetailProps {
   activity: Activity
+  currentDayIndex: number
   isAdded: boolean
   selectedVariantId?: string
   onAdd: (activityId: ActivityId) => void
@@ -51,6 +52,7 @@ function MapRow({ places = [], links, driveFirst = false }: MapRowProps) {
 
 export function ActivityDetail({
   activity,
+  currentDayIndex,
   isAdded,
   selectedVariantId,
   onAdd,
@@ -96,33 +98,22 @@ export function ActivityDetail({
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
-      style={{
-        width: 'min(calc(100% - 2rem), 48rem)',
-        maxHeight: 'calc(100dvh - 2rem)',
-        padding: 0,
-        overflow: 'hidden',
-      }}
     >
-      <div
-        className="activity-detail__scroll"
-        style={{
-          maxHeight: 'calc(100dvh - 2rem)',
-          overflowY: 'auto',
-          overscrollBehavior: 'contain',
-          padding: '1rem',
-        }}
-      >
-        <header className="activity-detail__header">
-          <button
-            ref={closeRef}
-            type="button"
-            className="btn ghost"
-            aria-label={labels.detail.closeActivity(activity.title)}
-            onClick={onClose}
-          >
-            {labels.detail.back}
-          </button>
-          <h2 id={titleId}>{activity.title}</h2>
+      <header className="activity-detail__header">
+        <h2 id={titleId}>{activity.title}</h2>
+        <button
+          ref={closeRef}
+          type="button"
+          className="btn ghost"
+          aria-label={labels.detail.closeActivity(activity.title)}
+          onClick={onClose}
+        >
+          {labels.detail.back}
+        </button>
+      </header>
+
+      <div className="activity-detail__scroll">
+        <div className="activity-detail__intro">
           <p>
             <span>{labels.activity.area}</span> {activity.areaLabel}
           </p>
@@ -132,7 +123,7 @@ export function ActivityDetail({
               {activity.tags.map((tag) => <li className="tag" key={tag}>{tag}</li>)}
             </ul>
           )}
-        </header>
+        </div>
 
         <dl className="activity-detail__facts">
           <div>
@@ -158,7 +149,7 @@ export function ActivityDetail({
             <button
               type="button"
               className="btn"
-              aria-label={labels.catalogue.removeActivity(activity.title)}
+              aria-label={labels.catalogue.removeActivity(activity.title, currentDayIndex)}
               onClick={() => onRemove(activity.id)}
             >
               {labels.catalogue.remove}
@@ -167,13 +158,13 @@ export function ActivityDetail({
             <button
               type="button"
               className="btn"
-              aria-label={labels.catalogue.addActivity(activity.title)}
+              aria-label={labels.catalogue.addActivity(activity.title, currentDayIndex)}
               onClick={() => onAdd(activity.id)}
             >
-              {labels.catalogue.add}
+              {labels.catalogue.add(currentDayIndex)}
             </button>
           )}
-          {isAdded && <p role="status">{labels.catalogue.added}</p>}
+          {isAdded && <p role="status">{labels.catalogue.added(currentDayIndex)}</p>}
         </div>
 
         {activity.stats && (

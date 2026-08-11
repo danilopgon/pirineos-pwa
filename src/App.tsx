@@ -35,7 +35,7 @@ export function App() {
       <a className="skip" href={`#${CONTENT_ID}`}>
         {labels.skipToContent}
       </a>
-      <Header />
+      <Header title={view === 'today' ? undefined : labels.nav.destinations[view]} />
 
       <main id={CONTENT_ID} tabIndex={-1}>
         {!storageOk && <Note text={labels.storage.unavailable} />}
@@ -55,8 +55,11 @@ export function App() {
         ) : view === 'explore' ? (
           <ExploreView
             activities={trip.activities}
+            days={trip.days}
+            currentDayId={state.currentDayId}
             addedActivityIds={currentDay.activityIds}
             selectedVariantIds={currentDay.selectedVariantIds}
+            onSelectDay={selectCurrentDay}
             onAdd={(activityId) => addActivity(state.currentDayId, activityId)}
             onRemove={(activityId) => removeActivity(state.currentDayId, activityId)}
             onSelectVariant={(activityId, variantId) => (
