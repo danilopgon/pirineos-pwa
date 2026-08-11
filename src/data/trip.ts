@@ -554,7 +554,7 @@ const activities: Activity[] = [
       'Salir de Benasque siguiendo el río hacia Eriste. Son unos 80 m de desnivel y alrededor de 1 h 40; cifras aproximadas, así que llevad el trazado comprobado en el móvil.',
       'Al llegar se puede alargar junto al **embalse de Linsoles**, enlazar otro día con **Anciles** o volver y guardar la tarde para Benasque. No hace falta convertir un paseo de recuperación en una excursión.',
     ],
-    places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628, includeInTripMap: false }],
+    places: [{ name: 'Eriste', lat: 42.5871815, lng: 0.4897126 }],
     affinities: [
       { activityId: 'linsoles-guayente-sahun', weight: 3, reason: 'El embalse queda al llegar a Eriste.' },
       { activityId: 'benasque-anciles', weight: 2, reason: 'Anciles encaja en otro paseo corto desde Benasque.' },
@@ -583,7 +583,7 @@ const activities: Activity[] = [
       'Empezad junto al **embalse de Linsoles**, caminad lo que apetezca junto al agua y seguid hacia **Guayente** para ver el santuario. **Sahún** cierra el recorrido con calles de piedra y sitio para parar.',
       'Las 2–3 h son aproximadas y dependen de cuánto se ande junto al embalse. Si el cuerpo pide recorte, se quita un tramo, no el sentido del plan: agua, santuario y pueblo.',
     ],
-    places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628, includeInTripMap: false }],
+    places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628 }],
     affinities: [{ activityId: 'benasque-eriste', weight: 3, reason: 'Comparten Eriste y el embalse.' }],
   },
   {
@@ -595,7 +595,7 @@ const activities: Activity[] = [
       'Elegid dos, tres o cuatro paradas entre **Villanova, Sahún, Sesué/Sos y Chía**. Cada pueblo funciona por separado: si una terraza se alarga o el cuerpo dice basta, el resto queda para otro día.',
       'Contad aproximadamente media jornada. Se puede ampliar sin problema, pero no tiene itinerario cerrado ni una casilla que haya que completar.',
     ],
-    places: [{ name: 'Sahún', lat: 42.6029992, lng: 0.4470204, includeInTripMap: false }],
+    places: [{ name: 'Sahún', lat: 42.6029992, lng: 0.4470204 }],
     affinities: [{ activityId: 'linsoles-guayente-sahun', weight: 2, reason: 'Sahún aparece en los dos planes.' }],
   },
   {
