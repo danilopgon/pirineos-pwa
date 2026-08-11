@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Pirineos sin bus · 5 días desde Benasque</title>
     <meta name="description" content="Guía offline de 5 días de senderismo con base en Benasque, solo coche." />
-    <!-- El manifiesto solo admite un color; aqui si se puede seguir el
-         esquema del sistema y evitar que la barra pelee con la pagina. -->
-    <meta name="theme-color" content="#101d1a" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0e1614" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#101d1a" />
+    <script>
+      try {
+        const theme = localStorage.getItem('pirineos:tema:v1')
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme
+        const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#09100e' : '#101d1a'
+      } catch {}
+    </script>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

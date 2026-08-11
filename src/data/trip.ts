@@ -763,6 +763,13 @@ const infoBlocks: InfoBlock[] = [
     id: 'practical', title: 'Info práctica',
     sections: [
       {
+        heading: 'Cómo leer las cifras',
+        body: [
+          'Las distancias, los desniveles y los tiempos son de ida y vuelta e incluyen paradas razonables, no ritmo de carrera.',
+        ],
+        id: 'measurements',
+      },
+      {
         heading: 'Horarios',
         body: [
           'La regla del verano pirenaico: en marcha antes de las 8:00, punto alto antes de las 14:00, de vuelta al coche a media tarde. Las tormentas de agosto son de tarde y bastante puntuales. Los parkings buenos (Estós, Llanos del Hospital, San Úrbez) se llenan entre las 9:00 y las 10:30.',
@@ -826,10 +833,6 @@ export const trip: Trip = {
   ],
   activities,
   infoBlocks,
-  footer: [
-    'Guía para 5 días completos con base en Benasque, sin autobuses y con coche propio. Distancias, desniveles y tiempos son de ida y vuelta e incluyen paradas razonables, no ritmo de carrera.',
-    'Los perfiles de altitud son esquemas orientativos, no datos GPS.',
-  ],
 }
 
 /** Todo el texto de interfaz. Los componentes no escriben literales. */
@@ -845,6 +848,18 @@ export const labels = {
   maps: {
     needsSignal: 'Necesita cobertura',
     routeTo: 'Ruta a',
+  },
+  theme: {
+    modes: {
+      auto: 'Auto',
+      light: 'Claro',
+      dark: 'Oscuro',
+    },
+    controlName: (current: string, next: string) => `Tema ${current}. Cambiar a ${next}`,
+    changed: (mode: string) => `Tema ${mode} activado`,
+  },
+  update: {
+    applied: 'La guía se ha actualizado. Seguís en la misma vista.',
   },
   profile: {
     caption: 'perfil orientativo',

@@ -32,6 +32,36 @@
   --effort-bajo: #32656b;
   --effort-medio: #7d5617;
   --effort-alto: #912f20;
+  --dark-paper: #0e1614;
+  --dark-card: #14201d;
+  --dark-ink: #e6edeb;
+  --dark-slate: #a3b6b1;
+  --dark-line: #2d3f3a;
+  --dark-water: #5fc3d0;
+  --dark-water-soft: #16302e;
+  --dark-alert: #ff9166;
+  --dark-alert-soft: #33201a;
+  --dark-nav-bg: rgba(14, 22, 20, 0.96);
+  --dark-backdrop: rgba(0, 5, 4, 0.78);
+  --dark-header-bg: #09100e;
+  --dark-header-ink: #e6edeb;
+  --dark-top-dim: #b7c9c5;
+  --dark-eyebrow-ink: #8aa39e;
+  --dark-on-accent: #0e1614;
+  --dark-selected-soft: #1a302a;
+  --dark-done: #79d29d;
+  --dark-done-soft: #173025;
+  --dark-disabled: #758681;
+  --dark-category-montana: #79c79a;
+  --dark-category-paseo: #83b5a3;
+  --dark-category-pueblos: #d9a978;
+  --dark-category-cultura: #b79ce4;
+  --dark-category-agua: #5fc3d0;
+  --dark-category-relax: #d39bb8;
+  --dark-effort-muy-bajo: #77d09b;
+  --dark-effort-bajo: #73bec3;
+  --dark-effort-medio: #e6bb72;
+  --dark-effort-alto: #ff9573;
   --disclosure: var(--water);
   --accent: var(--water);
   --effort: var(--slate);
@@ -143,6 +173,20 @@ button:disabled { cursor: not-allowed; }
   opacity: 0.22;
 }
 .top-in { position: relative; }
+.top-in--row,
+.top-in--home {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.theme-toggle {
+  flex: 0 0 auto;
+  min-width: 72px;
+  min-height: 44px;
+  border-color: var(--eyebrow-ink);
+  color: var(--header-ink);
+}
 .top h1 {
   max-width: 12ch;
   font-size: clamp(36px, 11vw, 54px);
@@ -367,18 +411,48 @@ main:focus { outline: none; }
 }
 .today-suggestion__reasons li::before { content: '— '; }
 
-/* Los filtros permanecen disponibles durante el repaso del catálogo. */
+/* Solo las categorias siguen visibles; el filtro secundario deja sitio al catalogo. */
 .explore-filters {
   position: sticky;
   z-index: 10;
   top: 0;
-  margin-bottom: 18px;
-  padding: 12px;
-  border: 1px solid var(--line);
+  margin: 0 calc(-1 * var(--sp));
+  padding: 8px var(--sp);
+  border: 0;
+  border-bottom: 1px solid var(--line);
   background: var(--card);
 }
-.explore-filters__categories .btn { flex: 0 0 auto; }
-.explore-filters__easy { width: 100%; margin-top: 9px; }
+.explore-filters legend { border: 0; }
+.explore-filters legend:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+.explore-filters__categories {
+  padding: 0 26px 0 0;
+  margin: 0;
+  scrollbar-color: var(--water) var(--paper);
+  scrollbar-width: thin;
+}
+.explore-filters__categories .btn {
+  flex: 0 0 auto;
+  min-height: 48px;
+  scroll-snap-align: start;
+}
+.explore-filters::after {
+  position: absolute;
+  inset: 8px 0 15px auto;
+  width: 26px;
+  background: linear-gradient(to right, transparent, var(--card));
+  pointer-events: none;
+  content: '';
+}
+.explore-filters__easy { width: 100%; margin: 10px 0 18px; }
 .explore-filters .btn[aria-pressed='true'] {
   border-color: var(--water);
   background: var(--water);
@@ -717,14 +791,14 @@ main:focus { outline: none; }
   text-transform: uppercase;
 }
 
-footer {
-  max-width: var(--shell);
-  margin: 0 auto;
-  padding: 22px max(var(--sp), env(safe-area-inset-right)) 24px max(var(--sp), env(safe-area-inset-left));
-  color: var(--slate);
+.update-notice {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--done);
+  background: var(--done-soft);
+  color: var(--ink);
   font-size: 14px;
 }
-footer p { margin: 0 0 8px; max-width: var(--measure); }
 
 /* Navegación fija, separada del contenido y de la zona del indicador de inicio. */
 .bottom-nav {
@@ -833,56 +907,73 @@ footer p { margin: 0 0 8px; max-width: var(--measure); }
   html { scroll-behavior: auto; }
 }
 
-/* Esquema oscuro completo: cada token de color de :root se redefine aquí. */
+/* El modo explicito gana al sistema sin dejar tokens a medio cambiar. */
+:root[data-theme='dark'] {
+  --paper: var(--dark-paper);
+  --card: var(--dark-card);
+  --ink: var(--dark-ink);
+  --slate: var(--dark-slate);
+  --line: var(--dark-line);
+  --water: var(--dark-water);
+  --water-soft: var(--dark-water-soft);
+  --alert: var(--dark-alert);
+  --alert-soft: var(--dark-alert-soft);
+  --nav-bg: var(--dark-nav-bg);
+  --backdrop: var(--dark-backdrop);
+  --header-bg: var(--dark-header-bg);
+  --header-ink: var(--dark-header-ink);
+  --top-dim: var(--dark-top-dim);
+  --eyebrow-ink: var(--dark-eyebrow-ink);
+  --on-accent: var(--dark-on-accent);
+  --selected-soft: var(--dark-selected-soft);
+  --done: var(--dark-done);
+  --done-soft: var(--dark-done-soft);
+  --disabled: var(--dark-disabled);
+  --category-montana: var(--dark-category-montana);
+  --category-paseo: var(--dark-category-paseo);
+  --category-pueblos: var(--dark-category-pueblos);
+  --category-cultura: var(--dark-category-cultura);
+  --category-agua: var(--dark-category-agua);
+  --category-relax: var(--dark-category-relax);
+  --effort-muy-bajo: var(--dark-effort-muy-bajo);
+  --effort-bajo: var(--dark-effort-bajo);
+  --effort-medio: var(--dark-effort-medio);
+  --effort-alto: var(--dark-effort-alto);
+}
+:root[data-theme='dark'] .top { border-bottom: 1px solid var(--line); }
+
 @media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #0e1614;
-    --card: #14201d;
-    --ink: #e6edeb;
-    --slate: #a3b6b1;
-    --line: #2d3f3a;
-    --water: #5fc3d0;
-    --water-soft: #16302e;
-    --alert: #ff9166;
-    --alert-soft: #33201a;
-    --crest: #6fc3ce;
-    --nav-bg: rgba(14, 22, 20, 0.96);
-    --backdrop: rgba(0, 5, 4, 0.78);
-    --header-bg: #09100e;
-    --header-ink: #e6edeb;
-    --top-dim: #b7c9c5;
-    --eyebrow-ink: #8aa39e;
-    --on-accent: #0e1614;
-    --selected-soft: #1a302a;
-    --done: #79d29d;
-    --done-soft: #173025;
-    --disabled: #758681;
-    --category-montana: #79c79a;
-    --category-paseo: #83b5a3;
-    --category-pueblos: #d9a978;
-    --category-cultura: #b79ce4;
-    --category-agua: #5fc3d0;
-    --category-relax: #d39bb8;
-    --effort-muy-bajo: #77d09b;
-    --effort-bajo: #73bec3;
-    --effort-medio: #e6bb72;
-    --effort-alto: #ff9573;
-    --disclosure: var(--water);
-    --accent: var(--water);
-    --effort: var(--slate);
+  :root:not([data-theme='light']) {
+    --paper: var(--dark-paper);
+    --card: var(--dark-card);
+    --ink: var(--dark-ink);
+    --slate: var(--dark-slate);
+    --line: var(--dark-line);
+    --water: var(--dark-water);
+    --water-soft: var(--dark-water-soft);
+    --alert: var(--dark-alert);
+    --alert-soft: var(--dark-alert-soft);
+    --nav-bg: var(--dark-nav-bg);
+    --backdrop: var(--dark-backdrop);
+    --header-bg: var(--dark-header-bg);
+    --header-ink: var(--dark-header-ink);
+    --top-dim: var(--dark-top-dim);
+    --eyebrow-ink: var(--dark-eyebrow-ink);
+    --on-accent: var(--dark-on-accent);
+    --selected-soft: var(--dark-selected-soft);
+    --done: var(--dark-done);
+    --done-soft: var(--dark-done-soft);
+    --disabled: var(--dark-disabled);
+    --category-montana: var(--dark-category-montana);
+    --category-paseo: var(--dark-category-paseo);
+    --category-pueblos: var(--dark-category-pueblos);
+    --category-cultura: var(--dark-category-cultura);
+    --category-agua: var(--dark-category-agua);
+    --category-relax: var(--dark-category-relax);
+    --effort-muy-bajo: var(--dark-effort-muy-bajo);
+    --effort-bajo: var(--dark-effort-bajo);
+    --effort-medio: var(--dark-effort-medio);
+    --effort-alto: var(--dark-effort-alto);
   }
-
-  [data-category='montana'] { --accent: var(--category-montana); }
-  [data-category='paseo'] { --accent: var(--category-paseo); }
-  [data-category='pueblos'] { --accent: var(--category-pueblos); }
-  [data-category='cultura'] { --accent: var(--category-cultura); }
-  [data-category='agua'] { --accent: var(--category-agua); }
-  [data-category='relax'] { --accent: var(--category-relax); }
-
-  [data-effort='muy-bajo'] { --effort: var(--effort-muy-bajo); }
-  [data-effort='bajo'] { --effort: var(--effort-bajo); }
-  [data-effort='medio'] { --effort: var(--effort-medio); }
-  [data-effort='alto'] { --effort: var(--effort-alto); }
-
-  .top { border-bottom: 1px solid var(--line); }
+  :root:not([data-theme='light']) .top { border-bottom: 1px solid var(--line); }
 }

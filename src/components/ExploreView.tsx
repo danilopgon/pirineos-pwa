@@ -14,9 +14,9 @@ import { DaySelector } from './DaySelector'
 const categoryFilters: readonly (ActivityCategory | 'all')[] = [
   'all',
   'montana',
+  'cultura',
   'paseo',
   'pueblos',
-  'cultura',
   'agua',
   'relax',
 ]
@@ -106,15 +106,15 @@ export function ExploreView({
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          className="btn ghost explore-filters__easy"
-          aria-pressed={easyOnly}
-          onClick={() => setEasyOnly((current) => !current)}
-        >
-          {labels.catalogue.easyOnly}
-        </button>
       </fieldset>
+      <button
+        type="button"
+        className="btn ghost explore-filters__easy"
+        aria-pressed={easyOnly}
+        onClick={() => setEasyOnly((current) => !current)}
+      >
+        {labels.catalogue.easyOnly}
+      </button>
 
       <section aria-labelledby={catalogueId}>
         <h3 className="visually-hidden" id={catalogueId}>{labels.catalogue.landmark}</h3>

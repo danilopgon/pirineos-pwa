@@ -1,4 +1,5 @@
-import { trip } from '../data/trip'
+import { labels, trip } from '../data/trip'
+import type { ThemeMode } from '../hooks/useTheme'
 
 /** Curvas de nivel de la cabecera. Decoracion, no dato. */
 const CONTOURS = [
@@ -12,14 +13,46 @@ const CONTOURS = [
 
 interface HeaderProps {
   title?: string
+  themeMode: ThemeMode
+  themeAnnouncement: string
+  onCycleTheme: () => void
 }
 
-export function Header({ title }: HeaderProps) {
+function ThemeControl({
+  mode,
+  announcement,
+  onCycle,
+}: {
+  mode: ThemeMode
+  announcement: string
+  onCycle: () => void
+}) {
+  const next = mode === 'auto' ? 'light' : mode === 'light' ? 'dark' : 'auto'
+  return (
+    <>
+      <button
+        type="button"
+        className="btn ghost theme-toggle"
+        aria-label={labels.theme.controlName(labels.theme.modes[mode], labels.theme.modes[next])}
+        onClick={onCycle}
+      >
+        {labels.theme.modes[mode]}
+      </button>
+      <span className="visually-hidden" role="status" aria-live="polite">{announcement}</span>
+    </>
+  )
+}
+
+export function Header({ title, themeMode, themeAnnouncement, onCycleTheme }: HeaderProps) {
+  const themeControl = (
+    <ThemeControl mode={themeMode} announcement={themeAnnouncement} onCycle={onCycleTheme} />
+  )
   if (title) {
     return (
       <header className="top top--compact">
-        <div className="top-in">
+        <div className="top-in top-in--row">
           <h1>{title}</h1>
+          {themeControl}
         </div>
       </header>
     )
@@ -34,13 +67,16 @@ export function Header({ title }: HeaderProps) {
           ))}
         </g>
       </svg>
-      <div className="top-in">
-        <span className="eyebrow">{trip.eyebrow}</span>
-        <h1>
-          {trip.title}
-          <em>{trip.titleAccent}</em>
-        </h1>
-        <p>{trip.intro}</p>
+      <div className="top-in top-in--home">
+        <div>
+          <span className="eyebrow">{trip.eyebrow}</span>
+          <h1>
+            {trip.title}
+            <em>{trip.titleAccent}</em>
+          </h1>
+          <p>{trip.intro}</p>
+        </div>
+        {themeControl}
       </div>
     </header>
   )

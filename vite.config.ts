@@ -26,11 +26,6 @@ export default defineConfig({
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
           { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
-        shortcuts: [
-          { name: 'Día de hoy', url: './#d1' },
-          { name: 'Offline y tracks', url: './#offline' },
-          { name: 'Comer vegano', url: './#vegano' },
-        ],
       },
       workbox: {
         // Solo woff2: @fontsource emite tambien .woff, que ningun navegador

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { registerSW } from 'virtual:pwa-register'
+import './lib/pwaUpdate'
 
 // Las tipografias van en el bundle: desde el CDN caerian a las del sistema
 // en cuanto no haya cobertura.
@@ -13,8 +13,6 @@ import '@fontsource/ibm-plex-mono/latin-500.css'
 import './styles.css'
 
 import { App } from './App'
-
-registerSW({ immediate: true })
 
 const root = document.getElementById('root')
 if (root) {

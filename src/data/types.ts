@@ -178,5 +178,4 @@ export interface Trip {
   days: TripDay[]
   activities: Activity[]
   infoBlocks: InfoBlock[]
-  footer: string[]
 }
