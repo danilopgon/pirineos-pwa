@@ -35,6 +35,8 @@ export interface Place {
   lng: number
   googlePlaceId?: string
   note?: string
+  /** Mantiene estable el mapa general cuando el punto solo sirve a una ficha. */
+  includeInTripMap?: boolean
 }
 
 export interface Link {

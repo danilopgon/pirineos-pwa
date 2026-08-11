@@ -41,9 +41,9 @@ function MapRow({ places = [], links, driveFirst = false }: MapRowProps) {
       {driveFirst && first && (
         <DriveButton place={first} label={labels.detail.driveHere} />
       )}
-      {places.map((place) => (
-        <PlaceLink key={place.name} place={place} />
-      ))}
+      {places
+        .filter((place, index) => !(driveFirst && index === 0 && !place.googlePlaceId))
+        .map((place) => <PlaceLink key={place.name} place={place} />)}
       <ExternalLinks links={links} small />
       {places.length > 0 && <OfflineMapButton places={places} />}
     </Btns>

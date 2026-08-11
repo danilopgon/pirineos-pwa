@@ -70,8 +70,8 @@ const activities: Activity[] = [
     ],
     places: [
       {
-        name: 'Fin del asfalto de la A-139', lat: 42.6814742, lng: 0.6040248,
-        note: 'Es el parking del Vado: desde ahí, 1 km más por la carretera vieja.',
+        name: 'Parking del Vado', lat: 42.6814742, lng: 0.6040248,
+        note: 'El inicio está 1 km más adelante por la carretera vieja, al final del asfalto.',
       },
     ],
   },
@@ -151,14 +151,19 @@ const activities: Activity[] = [
         { value: 'Mismo parking' },
       ],
     },
+    access: [
+      'Salir de Benasque por la A-139 hacia los Llanos del Hospital y, a 3–4 km, tomar el desvío a la izquierda al valle de Estós. Tras un kilómetro de pista está el aparcamiento, compartido con Batisielles. En agosto se llena pronto: mejor llegar antes de las 9:00.',
+    ],
     sections: [
       {
         heading: 'El plan',
         body: [
           'Pista cómoda por el fondo del valle sin desnivel serio, entre hayedos y con el Perdiguero de fondo. Se come caliente en el refugio de Estós y se vuelve en 2 h. El día de baño se resuelve en las **pozas del río Estós** cerca del propio aparcamiento, que son de agua igual de fría pero sin los 770 m de subida.',
         ],
+        note: 'Son unas 2 h 30 de ida y otras 2 h de vuelta: aunque la vereda sea fácil, ocupa casi todo el día. Llevad agua y el track descargado.',
       },
     ],
+    places: [{ name: 'Parking de Estós', lat: 42.6289596, lng: 0.5404105, googlePlaceId: 'ChIJjRqPFMd9qBIRj-8HNlcL-GI' }],
   },
   {
     id: 'roda-isabena', area: 'ribagorza', areaLabel: 'Ribagorza',
@@ -228,7 +233,7 @@ const activities: Activity[] = [
     places: [{ name: 'Sant Climent de Taüll', lat: 42.5174264, lng: 0.8486653 }],
   },
   {
-    id: 'benasque-anciles', title: 'Benasque, Anciles y Cerler a pie', area: 'benasque',
+    id: 'benasque-anciles', title: 'Benasque y Anciles a pie', area: 'benasque',
     areaLabel: 'Benasque y Anciles',
     category: 'pueblos', effort: 'muy-bajo', duration: 'corta', combinability: 'facil',
     tags: ['Sin coche', 'Casi llano'],
@@ -241,7 +246,11 @@ const activities: Activity[] = [
         ],
       },
     ],
-    affinities: [{ activityId: 'cerler-ampriu', weight: 2, reason: 'Cerler queda como salida propia, no dentro del paseo.' }],
+    places: [{ name: 'Anciles', lat: 42.5907204, lng: 0.5099826, googlePlaceId: 'ChIJhWXE-iB5qBIRf4ELCx-Cj_s' }],
+    affinities: [
+      { activityId: 'cerler-ampriu', weight: 2, reason: 'Cerler queda como salida propia, no dentro del paseo.' },
+      { activityId: 'eriste-anciles', weight: 2, reason: 'Las dos rutas terminan en Anciles.' },
+    ],
   },
   {
     id: 'anisclo', area: 'anisclo', areaLabel: 'Cañón de Añisclo',
@@ -309,15 +318,24 @@ const activities: Activity[] = [
     id: 'pueblos-vio', title: 'Ruta panorámica de Vió, Buerba y Fanlo', area: 'anisclo',
     areaLabel: 'Valle de Vió',
     category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil',
-    tags: ['En coche', 'Sin caminata fija'],
+    tags: ['En coche', 'Sin caminata fija', 'Cifras aproximadas'],
+    stats: { driveMin: 120, extra: [{ value: 'Unas **4 h** de coche' }] },
+    accessHeading: 'Cómo entrar al cañón',
+    access: [
+      'Desde Benasque se baja por Aínsa hasta **Escalona** y se entra por el sur a la HU-631. En temporada alta el tramo del desfiladero funciona en **sentido único ascendente**, de Puyarruego hacia La Tella: no intentéis entrar desde Fanlo.',
+    ],
+    accessLinks: [{ label: 'Avisos del parque', href: 'https://pnomp.es/es/avisos', ghost: true }],
+    accessNote: 'Comprobad cierres y obras el día antes. Entre ida, vuelta y el bucle panorámico salen unas cuatro horas de coche.',
     sections: [
       {
         heading: 'El plan',
         body: [
           'La propia HU-631 por el fondo del cañón es el espectáculo. Se vuelve por la carretera que lo bordea, parando en **Vió, Buerba y Fanlo**, pueblos de piedra medio despoblados. Si apetece andar algo, se puede sumar la ruta del agua de San Úrbez; si no, se cierra comiendo en Aínsa.',
         ],
+        note: 'El parking de San Úrbez es pequeño. Si la carretera está cerrada, este plan tampoco sale: no depende de haber abierto antes la ficha de Añisclo para saberlo.',
       },
     ],
+    places: [{ name: 'Parking de San Úrbez', lat: 42.5588298, lng: 0.050276 }],
     affinities: [{ activityId: 'ainsa', weight: 2, reason: 'Se puede cerrar comiendo allí.' }],
   },
   {
@@ -527,51 +545,67 @@ const activities: Activity[] = [
     ],
   },
   {
-    id: 'benasque-eriste', title: 'Benasque–Eriste', area: 'benasque', areaLabel: 'Benasque y Eriste',
-    category: 'paseo', effort: 'bajo', duration: 'corta', combinability: 'facil',
-    tags: ['Paseo de valle', 'Cifras aproximadas'],
-    lede: 'Un paseo de fondo de valle para seguir moviéndose sin pedirle al día una cima.',
-    route: [
-      'Salir desde Benasque hacia Eriste por el corredor del valle y volver por el mismo trazado si no apetece alargar. Las distancias y el tiempo son aproximados: comprobad el trazado antes de salir.',
-    ],
+    id: 'benasque-eriste', title: 'Benasque–Eriste por la ribera', area: 'benasque', areaLabel: 'Benasque y Eriste',
+    category: 'paseo', effort: 'muy-bajo', duration: 'corta', combinability: 'facil',
+    tags: ['Ribera del Ésera', 'Muy fácil', 'Cifras aproximadas'],
     stats: { distanceKm: 6.3, ascentM: 80, hours: '1 h 40' },
+    lede: 'La carta para el día sin piernas: unos 6,3 km por la ribera del Ésera, casi llanos y sin pedirle al cuerpo nada serio. También sirve como paseo de mañana antes de decidir el resto del día.',
+    route: [
+      'Salir de Benasque siguiendo el río hacia Eriste. Son unos 80 m de desnivel y alrededor de 1 h 40; cifras aproximadas, así que llevad el trazado comprobado en el móvil.',
+      'Al llegar se puede alargar junto al **embalse de Linsoles**, enlazar otro día con **Anciles** o volver y guardar la tarde para Benasque. No hace falta convertir un paseo de recuperación en una excursión.',
+    ],
+    places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628, includeInTripMap: false }],
+    affinities: [
+      { activityId: 'linsoles-guayente-sahun', weight: 3, reason: 'El embalse queda al llegar a Eriste.' },
+      { activityId: 'benasque-anciles', weight: 2, reason: 'Anciles encaja en otro paseo corto desde Benasque.' },
+    ],
   },
   {
-    id: 'eriste-anciles', title: 'Eriste–Anciles', area: 'benasque', areaLabel: 'Eriste y Anciles',
+    id: 'eriste-anciles', title: 'Eriste–Anciles por Casa Conques', area: 'benasque', areaLabel: 'Eriste y Anciles',
     category: 'paseo', effort: 'bajo', duration: 'corta', combinability: 'facil',
-    tags: ['Paseo de valle', 'Cifras aproximadas'],
-    lede: 'La carta tranquila entre dos pueblos, sin mezclarla con el paseo urbano de Benasque.',
-    route: [
-      'Unir Eriste y Anciles a ritmo de paseo y dejar margen para parar en los pueblos. El tiempo y la distancia son aproximados; llevad el recorrido comprobado.',
-    ],
+    tags: ['Buenas vistas', 'Fácil', 'Cifras aproximadas'],
     stats: { distanceKm: 5, ascentM: 110, hours: '1 h 30' },
+    lede: 'Unos 5 km fáciles entre Eriste y Anciles, con buenas vistas y **Casa Conques** marcando el paso. Termina en Anciles: aquí el final es parte del plan, no un punto para darse la vuelta sin mirar.',
+    route: [
+      'Salir de Eriste hacia **Casa Conques** y continuar hasta Anciles. Calculad alrededor de 110 m de desnivel y 1 h 30, todo aproximado; llevad el recorrido comprobado antes de salir.',
+      'Al terminar, dad una vuelta corta por las casas solariegas de Anciles. Es paseo para hablar y mirar el valle, no para ir contando kilómetros.',
+    ],
+    places: [{ name: 'Anciles', lat: 42.5907204, lng: 0.5099826, googlePlaceId: 'ChIJhWXE-iB5qBIRf4ELCx-Cj_s' }],
+    affinities: [{ activityId: 'benasque-anciles', weight: 3, reason: 'Las dos rutas terminan en Anciles.' }],
   },
   {
     id: 'linsoles-guayente-sahun', title: 'Linsoles, Guayente y Sahún', area: 'solano', areaLabel: 'Solano',
     category: 'pueblos', effort: 'bajo', duration: 'media-jornada', combinability: 'facil',
-    tags: ['Pueblos', 'Cifras aproximadas'],
-    lede: 'Tres paradas cercanas para un día de pueblos sin encadenar horas de coche.',
-    route: [
-      'Montar el recorrido con Linsoles, Guayente y Sahún como paradas flexibles. Los tiempos son aproximados: si hoy no están las piernas, se recorta sin perder el sentido del plan.',
-    ],
+    tags: ['Agua y patrimonio', 'Cifras aproximadas'],
     stats: { hours: '2-3' },
+    lede: 'El plan para querer andar sin meterse en montaña seria: agua en el embalse de Linsoles, patrimonio en el santuario de Guayente y un pueblo de verdad al llegar a Sahún. En unas 2–3 h cambia varias veces de registro sin castigar las piernas.',
+    route: [
+      'Empezad junto al **embalse de Linsoles**, caminad lo que apetezca junto al agua y seguid hacia **Guayente** para ver el santuario. **Sahún** cierra el recorrido con calles de piedra y sitio para parar.',
+      'Las 2–3 h son aproximadas y dependen de cuánto se ande junto al embalse. Si el cuerpo pide recorte, se quita un tramo, no el sentido del plan: agua, santuario y pueblo.',
+    ],
+    places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628, includeInTripMap: false }],
+    affinities: [{ activityId: 'benasque-eriste', weight: 3, reason: 'Comparten Eriste y el embalse.' }],
   },
   {
     id: 'pueblos-solano', title: 'Pueblos del Solano', area: 'solano', areaLabel: 'Solano',
     category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil',
-    tags: ['En coche', 'Cifras aproximadas'],
-    lede: 'Una vuelta de pueblos para el día que pide carretera corta y paradas, no una ruta cerrada.',
+    tags: ['Coche y paseos cortos', 'Media jornada aproximada', 'Ampliable'],
+    lede: 'Villanova, Sahún, Sesué o Sos y Chía: una vuelta para ver pueblos sin destruir las piernas. Se hace en coche, con paseos cortos donde apetezca, y no hay ninguna obligación de completar la lista.',
     route: [
-      'Elegir las paradas según el cuerpo y la hora. La duración es aproximada y depende de cuánto os entretengáis en cada pueblo.',
+      'Elegid dos, tres o cuatro paradas entre **Villanova, Sahún, Sesué/Sos y Chía**. Cada pueblo funciona por separado: si una terraza se alarga o el cuerpo dice basta, el resto queda para otro día.',
+      'Contad aproximadamente media jornada. Se puede ampliar sin problema, pero no tiene itinerario cerrado ni una casilla que haya que completar.',
     ],
+    places: [{ name: 'Sahún', lat: 42.6029992, lng: 0.4470204, includeInTripMap: false }],
+    affinities: [{ activityId: 'linsoles-guayente-sahun', weight: 2, reason: 'Sahún aparece en los dos planes.' }],
   },
   {
     id: 'cerler-ampriu', title: 'Cerler y Ampriu', area: 'cerler', areaLabel: 'Cerler',
     category: 'pueblos', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil',
-    tags: ['En coche', 'Cifras aproximadas'],
-    lede: 'Cerler deja de fingir que cabe en el paseo Benasque–Anciles: es su propia subida, con Ampriu como continuación si apetece.',
+    tags: ['En coche', 'Media mañana aproximada', 'Paseos cortos'],
+    lede: 'Media mañana aproximada para subir sin objetivo de cima: Cerler primero y luego la carretera del Ampriu, con el valle abriéndose en cada mirador. Paisaje de alta montaña desde el coche y paseos cortos a la medida de las piernas.',
     route: [
-      'Subir a **Cerler**, a 6 km de Benasque y 1.500 m, el pueblo habitado más alto del Pirineo aragonés. Se ve en una hora; después se decide allí si se continúa al Ampriu. El tiempo total es aproximado y cambia con las paradas.',
+      'Subir a **Cerler**, a 6 km de Benasque y 1.500 m, recorrer el casco antiguo sin prisa y continuar hacia el Ampriu. La carretera ya es parte del plan: buscad los puntos donde se ve el valle entero y parad solo donde sea seguro.',
+      'En el Ampriu se anda diez minutos o el rato que apetezca para probar el paisaje abierto, sin convertirlo en Pico Cerler ni Gallinero. Es una degustación de montaña, no una ruta con deberes.',
     ],
     places: [{ name: 'Ampriu', lat: 42.5611815, lng: 0.5695076 }],
     affinities: [

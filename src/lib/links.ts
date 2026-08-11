@@ -42,6 +42,8 @@ export function allPlaceEntries(trip: Trip): PlaceIndexEntry[] {
   const seen = new Set<string>()
 
   const push = (place: Place, groupKey: string, groupHeading: string, activityId?: string) => {
+    // El mapa general conserva su lista probada; cada ficha mantiene su enlace propio.
+    if (place.includeInTripMap === false) return
     const key = `${place.lat},${place.lng}`
     if (seen.has(key)) return
     seen.add(key)
