@@ -59,11 +59,15 @@ export function rankActivitySuggestions(
   }
 
   const hasFullDay = planned.some((activity) => activity.duration === 'dia-completo')
-  const mediumCount = planned.filter((activity) => activity.duration === 'media-jornada').length
-  const shortCount = planned.filter((activity) => activity.duration === 'corta').length
+  const load = planned.reduce((total, activity) => (
+    total + (activity.duration === 'dia-completo' ? 4 : activity.duration === 'media-jornada' ? 2 : 1)
+  ), 0)
   const demandingCount = planned.filter((activity) => (
     activity.effort === 'medio' || activity.effort === 'alto'
   )).length
+
+  // Tres medias jornadas ya no necesitan mas ruido.
+  if (load >= 6) return []
 
   return activities
     .filter((activity) => !excluded.has(activity.id))
@@ -88,6 +92,9 @@ export function rankActivitySuggestions(
         score += 8
         evidence.push({ key: 'nearby', value: 8, priority: 2 })
       }
+
+      const hasGeographicEvidence = Boolean(affinityWeight || sameArea || nearby)
+      if (planned.length && !hasGeographicEvidence) score -= 100
 
       if (activity.duration === 'corta') {
         score += 4
@@ -115,15 +122,15 @@ export function rankActivitySuggestions(
         score -= 10
       }
 
-      // Las categorias bastan para medir carga sin fingir precision horaria.
+      // La carga crece por cada plan, sin fingir precision horaria.
+      const candidateLoad = activity.duration === 'dia-completo'
+        ? 4
+        : activity.duration === 'media-jornada'
+          ? 2
+          : 1
+      score -= Math.max(0, load + candidateLoad - 4) * 5
       if (hasFullDay) {
-        score -= activity.duration === 'corta' && activity.combinability === 'facil' ? 6 : 14
-      } else if (mediumCount > 0) {
-        if (activity.duration === 'dia-completo') score -= 12
-        else if (activity.duration === 'media-jornada') score -= 4
-      } else if (shortCount >= 2) {
-        if (activity.duration === 'dia-completo') score -= 10
-        else if (activity.duration === 'media-jornada') score -= 3
+        score -= activity.duration === 'corta' && activity.combinability === 'facil' ? 3 : 9
       }
 
       if (demandingCount > 0) {

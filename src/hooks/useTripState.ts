@@ -32,32 +32,36 @@ function isDayId(value: unknown): value is TripDayId {
   return typeof value === 'string' && DAY_IDS.includes(value as TripDayId)
 }
 
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string')
+const activitiesById = new Map(trip.activities.map((activity) => [activity.id, activity]))
+
+function stringItems(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : []
 }
 
-function isVariantMap(value: unknown): value is Record<ActivityId, string> {
-  return Boolean(
-    value
-      && typeof value === 'object'
-      && !Array.isArray(value)
-      && Object.values(value).every((variantId) => typeof variantId === 'string'),
-  )
-}
-
-function isPlannedDay(value: unknown): value is PlannedDayState {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+function parsePlannedDay(value: unknown): PlannedDayState {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return emptyDay()
   const day = value as Partial<PlannedDayState>
-  if (
-    !isStringArray(day.activityIds)
-    || !isStringArray(day.completedActivityIds)
-    || !isVariantMap(day.selectedVariantIds)
-  ) return false
+  const activityIds = [...new Set(
+    stringItems(day.activityIds).filter((id) => activitiesById.has(id)),
+  )]
+  const planned = new Set(activityIds)
+  const completedActivityIds = [...new Set(
+    stringItems(day.completedActivityIds).filter((id) => planned.has(id)),
+  )]
+  const selectedVariantIds: Record<ActivityId, string> = {}
 
-  const activities = new Set(day.activityIds)
-  return activities.size === day.activityIds.length
-    && day.completedActivityIds.every((id) => activities.has(id))
-    && Object.keys(day.selectedVariantIds).every((id) => activities.has(id))
+  if (day.selectedVariantIds && typeof day.selectedVariantIds === 'object' && !Array.isArray(day.selectedVariantIds)) {
+    for (const [activityId, variantId] of Object.entries(day.selectedVariantIds)) {
+      const activity = planned.has(activityId) ? activitiesById.get(activityId) : undefined
+      if (typeof variantId === 'string' && activity?.variants?.some((variant) => variant.id === variantId)) {
+        selectedVariantIds[activityId] = variantId
+      }
+    }
+  }
+
+  return { activityIds, completedActivityIds, selectedVariantIds }
 }
 
 export function parseTripState(raw: string | null): TripState {
@@ -70,22 +74,18 @@ export function parseTripState(raw: string | null): TripState {
     }
 
     const candidate = parsed as Partial<TripState>
-    if (!isDayId(candidate.currentDayId) || !candidate.days || typeof candidate.days !== 'object') {
-      return createInitialTripState()
-    }
-
-    for (const dayId of DAY_IDS) {
-      if (!isPlannedDay(candidate.days[dayId])) return createInitialTripState()
-    }
+    const days = candidate.days && typeof candidate.days === 'object' && !Array.isArray(candidate.days)
+      ? candidate.days as Partial<Record<TripDayId, unknown>>
+      : {}
 
     return {
-      currentDayId: candidate.currentDayId,
+      currentDayId: isDayId(candidate.currentDayId) ? candidate.currentDayId : 'd1',
       days: {
-        d1: candidate.days.d1,
-        d2: candidate.days.d2,
-        d3: candidate.days.d3,
-        d4: candidate.days.d4,
-        d5: candidate.days.d5,
+        d1: parsePlannedDay(days.d1),
+        d2: parsePlannedDay(days.d2),
+        d3: parsePlannedDay(days.d3),
+        d4: parsePlannedDay(days.d4),
+        d5: parsePlannedDay(days.d5),
       },
     }
   } catch {
@@ -210,6 +210,16 @@ export function useTripState() {
       setStorageOk(false)
     }
   }, [tripState])
+
+  useEffect(() => {
+    const adoptStoredState = (event: StorageEvent) => {
+      if (event.storageArea === localStorage && event.key === KEY && event.newValue) {
+        setTripState(parseTripState(event.newValue))
+      }
+    }
+    window.addEventListener('storage', adoptStoredState)
+    return () => window.removeEventListener('storage', adoptStoredState)
+  }, [])
 
   const selectCurrentDay = useCallback((dayId: TripDayId) => {
     setTripState((state) => selectCurrentDayState(state, dayId))
