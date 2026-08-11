@@ -107,8 +107,8 @@ function PlacesByGroup() {
 
 function Card({ card }: { card: InfoCard }) {
   return (
-    <div className="alt">
-      <span className="pill">{card.label}</span>
+    <div className="info-card">
+      <span className="info-card__label">{card.label}</span>
       <h4>{card.title}</h4>
       <Mini items={card.mini ?? []} />
       <Paragraphs items={card.body} />

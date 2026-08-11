@@ -23,6 +23,7 @@ export function ActivityCard({
     <article
       className="activity-card"
       data-category={activity.category}
+      data-effort={activity.effort}
       data-added={isAdded || undefined}
       aria-labelledby={titleId}
     >

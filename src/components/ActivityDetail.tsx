@@ -85,6 +85,8 @@ export function ActivityDetail({
     <dialog
       ref={dialogRef}
       className="activity-detail"
+      data-category={activity.category}
+      data-effort={activity.effort}
       aria-labelledby={titleId}
       aria-modal="true"
       onCancel={(event) => {

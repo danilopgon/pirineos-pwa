@@ -47,7 +47,12 @@ function PlannedActivityRow({
   const selectedVariantId = day.selectedVariantIds[activity.id] ?? ''
 
   return (
-    <li className="planned-activity" data-done={isDone || undefined}>
+    <li
+      className="planned-activity"
+      data-category={activity.category}
+      data-effort={activity.effort}
+      data-done={isDone || undefined}
+    >
       <div className="planned-activity__summary">
         <h3>{activity.title}</h3>
         <p>{labels.today.activityMeta(
