@@ -109,12 +109,18 @@ export function ExternalLinks({ links, small }: { links?: Link[]; small?: boolea
  *
  * Con cobertura acompana a Google; sin ella, pasa a ser el boton principal.
  */
-export function OfflineMapButton({ places }: { places: Place[] }) {
+export function OfflineMapButton({
+  places,
+  label: customLabel,
+}: {
+  places: Place[]
+  label?: string
+}) {
   const online = useIsOnline()
   if (!places.length) return null
 
-  const label =
-    places.length === 1 ? labels.points.oneByOne : fill(labels.points.batch, places.length)
+  const label = customLabel
+    ?? (places.length === 1 ? labels.points.oneByOne : fill(labels.points.batch, places.length))
 
   return (
     <a
@@ -141,7 +147,7 @@ export function DriveButton({
 }) {
   return (
     <LinkButton
-      label={label ?? `${labels.day.routeTo} ${place.name}`}
+      label={label ?? `${labels.maps.routeTo} ${place.name}`}
       href={drivingUrl(trip.origin, place)}
       ghost={ghost}
       small={small}

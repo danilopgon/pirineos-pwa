@@ -50,7 +50,7 @@ function PlannedActivityRow({
     <li className="planned-activity" data-done={isDone || undefined}>
       <div className="planned-activity__summary">
         <h3>{activity.title}</h3>
-        <p>{labels.today.activitySummary(
+        <p>{labels.today.activityMeta(
           activity.areaLabel,
           labels.activity.durations[activity.duration],
         )}</p>

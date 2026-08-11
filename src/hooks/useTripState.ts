@@ -198,10 +198,6 @@ function read(): Loaded {
   }
 }
 
-const legacyEmpty = Object.freeze({}) as Readonly<Record<string, never>>
-const legacyNoop = (..._args: unknown[]) => undefined
-
-/** El estado viejo queda inerte hasta que el shell cambie de vistas. */
 export function useTripState() {
   const [loaded] = useState(read)
   const [tripState, setTripState] = useState<TripState>(loaded.state)
@@ -246,14 +242,8 @@ export function useTripState() {
   }, [])
 
   return {
-    // Compatibilidad inerte: el documento antiguo desaparece en la tarea 7.
-    state: { ...tripState, done: legacyEmpty, choice: legacyEmpty },
+    state: tripState,
     storageOk,
-    initialLast: undefined,
-    toggleDone: legacyNoop,
-    chooseAlternative: legacyNoop,
-    clearChoice: legacyNoop,
-    rememberSection: legacyNoop,
     selectCurrentDay,
     addActivity,
     removeActivity,

@@ -53,7 +53,7 @@ export function profileCaption(profile: ElevationProfile): string {
   const parts = [stops.join(' → ')]
   const climb = steepestClimb(profile)
   if (climb) parts.push(climb)
-  parts.push(labels.day.profileCaption)
+  parts.push(labels.profile.caption)
   return parts.join(' · ')
 }
 
@@ -82,7 +82,7 @@ function steepestClimb(profile: ElevationProfile): string | null {
   }
 
   if (!best || best.gain < 120) return null
-  return `${labels.day.steepest} ${number(best.gain)} m en ${number(round(best.km))} km`
+  return `${labels.profile.steepest} ${number(best.gain)} m en ${number(round(best.km))} km`
 }
 
 const stop = (metres: number, label?: string): string =>

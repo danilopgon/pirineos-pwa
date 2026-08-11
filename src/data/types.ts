@@ -113,8 +113,7 @@ export interface Activity {
 }
 
 export interface InfoCard {
-  // Temporal hasta migrar los bloques: las tarjetas antiguas aun no tienen id.
-  id?: string
+  id: string
   label: string
   title: string
   mini?: string[]
@@ -123,7 +122,6 @@ export interface InfoCard {
   place?: Place
   links?: Link[]
   widget?: 'puntos-uno-a-uno'
-  kind?: AltKind
 }
 
 export interface InfoSection {
@@ -168,80 +166,6 @@ export type SuggestionReason =
 
 export type NearbyAreas = Readonly<Record<AreaId, readonly AreaId[]>>
 
-// Transicion: el documento actual sigue vivo hasta el cambio de vistas.
-export type Difficulty = 'facil' | 'moderado' | 'exigente'
-export type AltKind = 'corta' | 'alternativa' | 'vago'
-
-/** Acento cromatico: tine etiquetas de dia, pildoras y perfiles de altitud. */
-export type Accent = 'agua' | 'bano' | 'cultura' | 'lejos'
-
-export interface Alternative {
-  kind: AltKind
-  /** Texto de la pildora. Si falta, se deriva de `kind`. */
-  label?: string
-  title: string
-  stats: Stats
-  body: string[] // parrafos
-  note?: string // aviso destacado
-  place?: Place
-}
-
-export interface Section {
-  heading: string
-  body: string[] // parrafos
-  list?: string[]
-  note?: string
-  places?: Place[]
-  links?: Link[]
-}
-
-export interface Day {
-  id: string // "d1"
-  index: number
-  /** Nombre corto para el chip de navegacion. */
-  short: string
-  area: string // "Valle de Estos"
-  title: string
-  lede: string
-  tags: string[]
-  accent?: Accent
-  stats: Stats
-  difficulty: Difficulty
-  elevationProfile?: ElevationProfile
-  accessHeading?: string
-  access: string[] // como llegar
-  accessLinks?: Link[]
-  accessNote?: string
-  routeHeading?: string
-  route: string[] // pasos numerados
-  routeNote?: string
-  sections?: Section[]
-  places: Place[]
-  altSummary?: string
-  alternatives: Alternative[]
-}
-
-/** Tarjeta con pildora en los bloques que no son dias. */
-export interface Block {
-  id: string
-  short: string
-  title: string
-  intro?: string
-  sections: BlockSection[]
-}
-
-export interface BlockSection {
-  heading?: string
-  body?: string[]
-  list?: string[]
-  note?: string
-  links?: Link[]
-  places?: Place[]
-  cards?: InfoCard[]
-  /** Secciones con controles propios. */
-  widget?: 'instalar' | 'puntos'
-}
-
 export interface Trip {
   eyebrow: string
   title: string
@@ -249,9 +173,7 @@ export interface Trip {
   intro: string
   /** Origen de todas las rutas en coche. */
   origin: string
-  // Temporal: la UI antigua aun consume dias y bloques completos.
-  days: Day[]
-  blocks: Block[]
+  days: TripDay[]
   activities: Activity[]
   infoBlocks: InfoBlock[]
   footer: string[]
