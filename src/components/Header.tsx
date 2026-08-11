@@ -10,7 +10,21 @@ const CONTOURS = [
   'M-10 50 C 80 10, 135 58, 205 20 S 300 -8, 410 38',
 ]
 
-export function Header() {
+interface HeaderProps {
+  title?: string
+}
+
+export function Header({ title }: HeaderProps) {
+  if (title) {
+    return (
+      <header className="top top--compact">
+        <div className="top-in">
+          <h1>{title}</h1>
+        </div>
+      </header>
+    )
+  }
+
   return (
     <header className="top">
       <svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true">

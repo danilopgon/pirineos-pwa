@@ -1,13 +1,11 @@
 import { labels } from '../data/trip'
-import type { Block, BlockSection, InfoCard } from '../data/types'
-import { md, placeGroups, pointsLabel, pointsUrl } from '../lib/content'
-import { organicMapsUrl } from '../lib/links'
+import type { InfoBlock, InfoCard, InfoSection } from '../data/types'
+import { md, placeGroups, pointsLabel, tripPlaces } from '../lib/content'
 import {
   Btns,
   Bullets,
   DriveButton,
   ExternalLinks,
-  LinkButton,
   Mini,
   Note,
   OfflineMapButton,
@@ -21,26 +19,38 @@ export interface InstallState {
   install: () => void
 }
 
-export function BlockCard({ block, install }: { block: Block; install: InstallState }) {
+export function InfoView({
+  blocks,
+  install,
+}: {
+  blocks: readonly InfoBlock[]
+  install: InstallState
+}) {
   return (
-    <section id={block.id}>
-      <div className="block">
-        <h2>{block.title}</h2>
-        <Note text={block.intro} />
-        {block.sections.map((section, i) => (
-          <SectionBody key={section.heading ?? i} section={section} install={install} />
-        ))}
-      </div>
+    <section className="info-view" aria-labelledby="info-heading">
+      <header className="info-view__header">
+        <h2 className="visually-hidden" id="info-heading">{labels.info.heading}</h2>
+        <p>{labels.info.intro}</p>
+      </header>
+      {blocks.map((block) => (
+        <article className="block" key={block.id} aria-labelledby={`info-${block.id}`}>
+          <h3 id={`info-${block.id}`}>{block.title}</h3>
+          <Note text={block.intro} />
+          {block.sections.map((section) => (
+            <SectionBody key={section.id} section={section} install={install} />
+          ))}
+        </article>
+      ))}
     </section>
   )
 }
 
-function SectionBody({ section, install }: { section: BlockSection; install: InstallState }) {
+function SectionBody({ section, install }: { section: InfoSection; install: InstallState }) {
   const hasRow = Boolean(section.links?.length || section.places?.length || section.widget === 'puntos')
 
   return (
-    <>
-      {section.heading && <h3>{md(section.heading)}</h3>}
+    <div className="info-section">
+      {section.heading && <h4>{md(section.heading)}</h4>}
       <Paragraphs items={section.body} />
       <Bullets items={section.list} />
       {hasRow && (
@@ -51,16 +61,16 @@ function SectionBody({ section, install }: { section: BlockSection; install: Ins
           ))}
           {section.places?.length ? <OfflineMapButton places={section.places} /> : null}
           {section.widget === 'puntos' && (
-            <LinkButton label={pointsLabel} href={pointsUrl} ghost />
+            <OfflineMapButton places={tripPlaces} label={pointsLabel} />
           )}
         </Btns>
       )}
       {section.widget === 'instalar' && <Install state={install} />}
       {section.cards?.map((card) => (
-        <Card key={card.title} card={card} />
+        <Card key={card.id} card={card} />
       ))}
       <Note text={section.note} />
-    </>
+    </div>
   )
 }
 
@@ -77,22 +87,16 @@ function Install({ state }: { state: InstallState }) {
   return <Note text={state.installed ? labels.install.done : labels.install.ios} />
 }
 
-/** Los puntos uno a uno, por dia. Todos son om://: abren sin cobertura. */
-function PlacesByDay() {
+/** Los grupos evitan una lista de botones sin contexto. */
+function PlacesByGroup() {
   return (
     <>
       {placeGroups.map((group) => (
         <div className="place-group" key={group.key}>
-          <h5>{group.heading}</h5>
+          <h6>{group.heading}</h6>
           <Btns>
             {group.items.map(({ place, label }) => (
-              <LinkButton
-                key={place.name}
-                label={label}
-                href={organicMapsUrl([place])}
-                ghost
-                small
-              />
+              <OfflineMapButton key={place.name} places={[place]} label={label} />
             ))}
           </Btns>
         </div>
@@ -103,12 +107,12 @@ function PlacesByDay() {
 
 function Card({ card }: { card: InfoCard }) {
   return (
-    <div className="alt" data-kind={card.kind}>
-      <span className="pill">{card.label}</span>
-      <h4>{card.title}</h4>
+    <div className="info-card">
+      <span className="info-card__label">{card.label}</span>
+      <h5>{card.title}</h5>
       <Mini items={card.mini ?? []} />
       <Paragraphs items={card.body} />
-      {card.widget === 'puntos-uno-a-uno' && <PlacesByDay />}
+      {card.widget === 'puntos-uno-a-uno' && <PlacesByGroup />}
       {(card.place || card.links?.length) && (
         <Btns>
           {card.place && <PlaceLink place={card.place} />}

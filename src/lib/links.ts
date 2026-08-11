@@ -1,4 +1,4 @@
-import type { Place, Trip } from '../data/types'
+import type { Activity, InfoBlock, Place, Trip } from '../data/types'
 
 /** Ruta en coche desde el origen del viaje hasta el punto. */
 export function drivingUrl(origin: string, place: Place): string {
@@ -29,36 +29,52 @@ export function organicMapsUrl(places: Place[]): string {
   return `om://map?v=1&${parts.join('&')}`
 }
 
-/**
- * Todos los puntos del viaje, en orden de lectura y con el dia al que
- * pertenecen delante del nombre.
- */
-export function allPlaces(trip: Trip): Place[] {
-  const out: Place[] = []
+export interface PlaceIndexEntry {
+  place: Place
+  groupKey: string
+  groupHeading: string
+  activityId?: string
+}
+
+/** El grupo viaja con el punto; el nombre queda libre para ser texto editorial. */
+export function allPlaceEntries(trip: Trip): PlaceIndexEntry[] {
+  const out: PlaceIndexEntry[] = []
   const seen = new Set<string>()
 
-  const push = (place: Place, name: string) => {
+  const push = (place: Place, groupKey: string, groupHeading: string, activityId?: string) => {
     const key = `${place.lat},${place.lng}`
     if (seen.has(key)) return
     seen.add(key)
-    out.push({ ...place, name })
+    out.push({ place, groupKey, groupHeading, activityId })
   }
 
-  for (const day of trip.days) {
-    for (const place of day.places) push(place, `D${day.index} ${place.name}`)
-    for (const alt of day.alternatives) {
-      if (alt.place) push(alt.place, `${alt.place.name} (alt. D${day.index})`)
+  const pushActivity = (activity: Activity) => {
+    const add = (place: Place) => push(place, `area:${activity.area}`, activity.areaLabel, activity.id)
+    for (const place of activity.places ?? []) add(place)
+    for (const section of activity.sections ?? []) {
+      for (const place of section.places ?? []) add(place)
+    }
+    for (const activityVariant of activity.variants ?? []) {
+      for (const place of activityVariant.places ?? []) add(place)
     }
   }
 
-  for (const block of trip.blocks) {
+  const pushInfo = (block: InfoBlock) => {
+    const add = (place: Place) => push(place, `info:${block.id}`, block.title)
     for (const section of block.sections) {
-      for (const place of section.places ?? []) push(place, place.name)
+      for (const place of section.places ?? []) add(place)
       for (const card of section.cards ?? []) {
-        if (card.place) push(card.place, card.place.name)
+        if (card.place) add(card.place)
       }
     }
   }
 
+  for (const activity of trip.activities) pushActivity(activity)
+  for (const block of trip.infoBlocks) pushInfo(block)
   return out
+}
+
+/** Catalogo deduplicado para el deep link offline. */
+export function allPlaces(trip: Trip): Place[] {
+  return allPlaceEntries(trip).map(({ place }) => place)
 }
