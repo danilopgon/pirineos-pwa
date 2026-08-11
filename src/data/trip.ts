@@ -76,6 +76,48 @@ const activities: Activity[] = [
     ],
   },
   {
+    id: 'ibones-remune', title: 'Ibones de Remuñe', short: 'Remuñe', area: 'llanos-hospital',
+    areaLabel: 'Valle de Remuñe',
+    category: 'montana', effort: 'medio', duration: 'media-jornada', combinability: 'normal',
+    tags: ['Ibones', 'Valle glaciar', 'Media jornada'],
+    stats: { distanceKm: 7, distanceNote: 'i/v', ascentM: [500, 520], hours: '3', driveMin: 25 },
+    lede: 'Una ruta compacta con bastante más sensación de alta montaña que kilómetros: pletas, torrente, granito y dos ibones escondidos bajo las cumbres fronterizas. Más salvaje que Aigualluts y bastante más corta que Batisielles.',
+    access: [
+      'Seguir la A-139 desde Benasque hasta el final del asfalto. El acceso al valle de Remuñe queda aproximadamente **1 km después del parking del Vado**, en la carretera vieja; contad 20–25 min de coche y no bloqueéis los accesos al aparcar.',
+    ],
+    route: [
+      'Entrar en el valle y remontar el torrente por el fondo, entre pletas y zonas de pasto. La pendiente gana metros de forma progresiva, sin el desnivel brusco de Gorgutes.',
+      'Continuar hacia la cabecera siguiendo el sendero y los hitos. El paisaje se vuelve más mineral y el piso más rocoso al acercarse a los ibones.',
+      'Llegar a los **ibones de Remuñe** y regresar por el mismo valle. Aquí no contamos una circular: la propuesta es una ida y vuelta clara de unos 7 km.',
+    ],
+    routeNote: 'No es técnica, pero el tramo rocoso y los hitos exigen más atención que Aigualluts. Con niebla se pierde la lectura del terreno y no es la mejor elección: llevad el track descargado.',
+    places: [
+      {
+        name: 'Parking del Vado', lat: 42.6814742, lng: 0.6040248,
+        note: 'Referencia de acceso: el sendero empieza aproximadamente 1 km más adelante, al final del asfalto.',
+      },
+    ],
+  },
+  {
+    id: 'portillon-benasque', title: 'Portillón de Benasque', short: 'Portillón', area: 'llanos-hospital',
+    areaLabel: 'Llanos del Hospital',
+    category: 'montana', effort: 'medio', duration: 'media-jornada', combinability: 'normal',
+    tags: ['Frontera', 'Paso histórico', 'Vistas a Francia'],
+    stats: { distanceKm: [9, 10], distanceNote: 'i/v', ascentM: [700, 750], hours: '4-4 h 30', driveMin: 25 },
+    lede: 'La subida tiene un destino con sentido: el paso que durante siglos comunicó Benasque con Luchon. Arriba se ven las dos vertientes, el paisaje francés y sus lagos; no es simplemente otra ruta que termina cuando se acaba la senda.',
+    access: [
+      'Desde Benasque, seguir la A-139 hasta el **parking público del Vado / Llanos del Hospital**. En verano conviene llegar pronto: es el mismo acceso concurrido de Aigualluts y La Besurta.',
+    ],
+    route: [
+      "Salir del Vado hacia el Hospital de Benasque y el Plan d'Están, por el fondo abierto del valle.",
+      'Tomar la subida señalizada hacia Peña Blanca y el Portillón. El camino abandona las praderas y gana altura de forma sostenida, con el valle cada vez más abajo.',
+      'Alcanzar el **Portillón de Benasque**, en la frontera: el paso histórico entre Benasque y Luchon abre la vista hacia Francia y los lagos de su vertiente.',
+      'Volver al Vado por el mismo itinerario. La ficha no incluye el Pico Salvaguardia: es una ampliación bastante más exigente y merece otra planificación.',
+    ],
+    routeNote: 'Son 700–750 m de subida y terreno abierto: comprobad viento, nubes y tormentas antes de salir. Que el camino sea histórico y esté trazado no lo convierte en un paseo.',
+    places: [{ name: 'Parking del Vado', lat: 42.6814742, lng: 0.6040248, googlePlaceId: 'ChIJ5YBFfomHqBIR6oKfwzNY1oA' }],
+  },
+  {
     id: 'gorgas-alba', title: 'Gorgas de Alba, sendero botánico', area: 'benasque',
     areaLabel: 'Valle de Benasque',
     category: 'agua', effort: 'bajo', duration: 'corta', combinability: 'facil',
@@ -166,6 +208,24 @@ const activities: Activity[] = [
     places: [{ name: 'Parking de Estós', lat: 42.6289596, lng: 0.5404105, googlePlaceId: 'ChIJjRqPFMd9qBIRj-8HNlcL-GI' }],
   },
   {
+    id: 'tuca-dalliu', title: 'Tuca Dalliu · Pico de Estós', short: 'Tuca Dalliu', area: 'estos',
+    areaLabel: 'Valle de Estós',
+    category: 'montana', effort: 'medio', duration: 'dia-completo', combinability: 'standalone',
+    tags: ['Cima', 'La más dura de las medias', 'Grandes vistas'],
+    stats: { distanceKm: 10, distanceNote: 'i/v', ascentM: 900, hours: '6', driveMin: 15, extra: [{ label: 'Cima', value: '≈2.530 m' }] },
+    lede: 'La actividad para terminar el día diciendo «hemos subido una montaña» sin buscar un tresmil. Sigue siendo el extremo superior del esfuerzo medio: una cima accesible para quien ya camina con regularidad, pero con 900 m que se notan en las piernas.',
+    access: [
+      'El sendero sale del entorno de **Puen de Lliterola**, junto a la A-139 al norte de Benasque. El punto exacto de estacionamiento no se guarda en el mapa porque no hemos podido verificar unas coordenadas con suficiente confianza: comprobad el inicio y descargad el track antes de salir.',
+    ],
+    route: [
+      'Empezar junto a Puen de Lliterola y ganar altura por el bosque. La subida es constante desde la carretera y pronto deja atrás el fondo del valle.',
+      'Salir a terreno más abierto hacia la zona de **Amuriadors** y continuar hacia la Tuca Dalliu siguiendo el trazado descargado.',
+      'Alcanzar la loma superior y la cima, a unos **2.530 m**, con vistas hacia Estós y los grandes macizos del valle. No hace falta añadir nombres a cada cumbre para entender la panorámica.',
+      'Descender por el mismo itinerario, reservando piernas y tiempo: los 900 m también se bajan.',
+    ],
+    routeNote: 'Es «medio» por dificultad, no por carga física. Son unas 6 h y +900 m: madrugad en verano, llevad agua suficiente y el track descargado, y descartadla si se anuncian tormentas. No cuenta como plan combinable para la tarde.',
+  },
+  {
     id: 'roda-isabena', area: 'ribagorza', areaLabel: 'Ribagorza',
     category: 'cultura', effort: 'muy-bajo', duration: 'dia-completo', combinability: 'normal',
     title: 'Románico y descanso', short: 'Cultura',
@@ -253,6 +313,22 @@ const activities: Activity[] = [
       },
     ],
     places: [{ name: 'Aínsa', lat: 42.4172743, lng: 0.1386853 }],
+    affinities: [{ activityId: 'abizanda-creencias', weight: 3, reason: 'Abizanda completa la salida de Aínsa sin ocupar otro día.' }],
+  },
+  {
+    id: 'abizanda-creencias', title: 'Creencias y supersticiones de Abizanda', short: 'Abizanda',
+    area: 'ainsa', areaLabel: 'Abizanda · Sobrarbe',
+    category: 'cultura', effort: 'muy-bajo', duration: 'corta', combinability: 'facil',
+    tags: ['Creencias populares', 'Museo', 'Casco medieval'],
+    stats: { extra: [{ value: 'Visita corta' }, { value: 'Comprobar apertura' }] },
+    lede: 'La versión antropológica de las historias de brujas del Pirineo: objetos y relatos sobre supersticiones, magia, remedios, protección frente a desgracias y religiosidad popular. Es una parada con tema propio, no otro museo local para completar una lista.',
+    route: [
+      'Comprobar antes la apertura del **Museo de Creencias y Religiosidad Popular del Pirineo Central**. La colección reúne piezas históricas vinculadas a enfermedades, protección, creencias sobrenaturales y prácticas religiosas cotidianas.',
+      'Después basta una vuelta corta por Abizanda y acercarse a la **torre del castillo**. El casco medieval es pequeño y no hace falta estirar la parada hasta convertirla en una excursión de día completo.',
+      'Encaja especialmente bien antes o después de **Aínsa**. Guaso queda en el mismo sector del Sobrarbe, pero la comida se decide aparte y no forma parte de esta actividad.',
+    ],
+    routeNote: 'La apertura del museo puede variar por temporada. Confirmadla antes de desviaros; si está cerrado, el pueblo y la torre siguen siendo una parada breve, pero ya no sostienen por sí solos el plan.',
+    affinities: [{ activityId: 'ainsa', weight: 3, reason: 'Es una parada cultural corta en la salida de Aínsa.' }],
   },
   {
     id: 'vall-boi', title: 'Románico de la Vall de Boí', area: 'boi', areaLabel: 'Vall de Boí',
@@ -402,7 +478,10 @@ const activities: Activity[] = [
         note: 'No es la Larri con un poco más de subida: es una jornada dura de alta montaña.',
       },
     ],
-    affinities: [{ activityId: 'bielsa-chistau', weight: 1, reason: 'Bielsa queda en el mismo lado del viaje.' }],
+    affinities: [
+      { activityId: 'bielsa-chistau', weight: 1, reason: 'Bielsa queda en el mismo lado del viaje.' },
+      { activityId: 'tella-brujas', weight: 2, reason: 'Tella añade folclore y patrimonio a la salida de Pineta.' },
+    ],
   },
   {
     id: 'llauset-anglios', area: 'llauset', areaLabel: 'Llauset',
@@ -551,6 +630,62 @@ const activities: Activity[] = [
         ],
       },
     ],
+    affinities: [
+      { activityId: 'basa-mora', weight: 3, reason: 'La pista sale de Saravillo, dentro del recorrido por Chistau.' },
+      { activityId: 'tella-brujas', weight: 2, reason: 'Tella encaja en el mismo sector de Bielsa y Chistau.' },
+    ],
+  },
+  {
+    id: 'tella-brujas', title: 'Tella, tierra de brujas', short: 'Tella', area: 'bielsa-chistau',
+    areaLabel: 'Tella · Sobrarbe',
+    category: 'cultura', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil',
+    tags: ['Brujería pirenaica', 'Tres ermitas', 'Dolmen'],
+    stats: { extra: [{ label: 'Paseo', value: '≈1 h circular' }, { value: 'Plan flexible' }] },
+    lede: 'Brujería, plantas, tres ermitas, bosque y un dolmen en una sola parada. La Casa de la Bruja pone contexto a las creencias locales; el resto se recorre al aire libre y cada pieza funciona aunque no apetezca completar el plan entero.',
+    routeHeading: 'El plan, por piezas',
+    route: [
+      'Empezar por la **Casa de la Bruja de Tella** para entender las creencias sobre magia y los usos tradicionales de las plantas en el Pirineo. Hay que comprobar apertura antes de subir.',
+      'Hacer la **ruta de las tres ermitas**, un circular sencillo de aproximadamente una hora por bosque y prados: Santos Juan y Pablo, Virgen de Fajanillas y Virgen de la Peña. La primera queda junto al Puntón de las Brujas, ligado al folclore local.',
+      'Parar en el **dolmen de Tella**, muy accesible desde la carretera. Es un complemento corto, no otra actividad que haya que encajar en el día.',
+    ],
+    sections: [
+      {
+        heading: 'Si hay visita y apetece',
+        body: [
+          'La **Cueva del Oso Cavernario** permite añadir una visita guiada al yacimiento. Requiere consultar disponibilidad y reservar; no contéis con entrar por llegar al pueblo ni con horarios fijos durante todo el año.',
+        ],
+        note: 'Casa, ermitas, dolmen y cueva no son una lista obligatoria. Con la Casa de la Bruja y el paseo ya hay una media jornada con sentido.',
+      },
+    ],
+    affinities: [
+      { activityId: 'bielsa-chistau', weight: 2, reason: 'Comparte la salida hacia Bielsa y Chistau.' },
+      { activityId: 'llanos-larri', weight: 2, reason: 'Tella queda como parada cultural al entrar o salir del sector de Pineta.' },
+    ],
+  },
+  {
+    id: 'basa-mora', title: 'Basa de la Mora · Ibón de Plan', short: 'Basa de la Mora',
+    area: 'bielsa-chistau', areaLabel: 'Valle de Chistau',
+    category: 'agua', effort: 'bajo', duration: 'media-jornada', combinability: 'facil',
+    tags: ['Ibón', 'Leyenda pirenaica', 'Acceso por pista'],
+    stats: { distanceKm: [3.5, 4], distanceNote: 'i/v desde Labasar', hours: '1-1 h 30', extra: [{ value: 'Poco desnivel' }] },
+    lede: 'Uno de esos lugares que parece mucho más remoto de lo que exige el paseo, siempre que se pueda llegar a Labasar. El bosque desemboca en un ibón bajo el Cotiella y la leyenda le da una identidad que no tiene otro lago del catálogo.',
+    access: [
+      'Desde Saravillo sale la pista hacia el **refugio de Labasar**. Su estado, regulación y acceso pueden cambiar: comprobad la información local antes de salir y no deis por hecho que un turismo puede subir ni que la pista está abierta.',
+    ],
+    route: [
+      'Desde Labasar, seguir el sendero por el bosque hasta la Basa de la Mora: alrededor de **1,8 km por trayecto**, poco desnivel y entre una hora y hora y media en total sin contar las paradas.',
+      'Volver por el mismo camino. Si la pista no admite vehículos, este paseo corto deja de ser el plan descrito aquí; subir andando desde Saravillo es una jornada físicamente distinta.',
+    ],
+    sections: [
+      {
+        heading: 'La mora del ibón',
+        body: [
+          'La tradición cuenta que una princesa encantada baila sobre el agua durante la noche de San Juan y que no cualquiera consigue verla. Es folclore del valle, no un episodio histórico, pero explica por qué aquí importa tanto la historia como el paisaje.',
+        ],
+      },
+    ],
+    routeNote: 'No incluimos como variante la subida a pie desde Saravillo: no es una pequeña ampliación y, sin cifras institucionales consistentes a mano, es mejor planificarla como otra ruta.',
+    affinities: [{ activityId: 'bielsa-chistau', weight: 3, reason: 'Saravillo, Plan y San Juan de Plan permiten cerrar un día ligero en Chistau.' }],
   },
   {
     id: 'paso-nuevo', title: 'Embalse de Paso Nuevo y presa de Benasque', area: 'benasque',
@@ -622,7 +757,31 @@ const activities: Activity[] = [
       'Las 2–3 h son aproximadas y dependen de cuánto se ande junto al embalse. Si el cuerpo pide recorte, se quita un tramo, no el sentido del plan: agua, santuario y pueblo.',
     ],
     places: [{ name: 'Embalse de Linsoles', lat: 42.5840867, lng: 0.4869628 }],
-    affinities: [{ activityId: 'benasque-eriste', weight: 3, reason: 'Comparten Eriste y el embalse.' }],
+    affinities: [
+      { activityId: 'benasque-eriste', weight: 3, reason: 'Comparten Eriste y el embalse.' },
+      { activityId: 'santa-margarita-eresue', weight: 3, reason: 'La ruta deja la tarde libre para este plan del Solano.' },
+    ],
+  },
+  {
+    id: 'santa-margarita-eresue', title: 'Santa Margarita de Eresué', short: 'Santa Margarita', area: 'solano',
+    areaLabel: 'Eresué · Solano',
+    category: 'montana', effort: 'medio', duration: 'media-jornada', combinability: 'facil',
+    tags: ['Bosque', 'Ermita', 'Mirador del valle'],
+    stats: { distanceKm: 9.8, distanceNote: 'i/v', ascentM: 540, hours: '3', driveMin: 10 },
+    lede: 'Una mañana de andar en serio sin entrar en terreno mineral: bosque, prados y una ermita con el valle entero como recompensa. El objetivo es el mirador de Santa Margarita, no ganar una cota de alta montaña.',
+    access: [
+      'Subir en coche desde Benasque a **Eresué**, en el Solano. Es un acceso corto; aparcad sin cerrar entradas ni pasos y comprobad el arranque del sendero antes de salir.',
+    ],
+    route: [
+      'Salir de Eresué y subir entre bosque y prados. Los 540 m se reparten en una ascensión sostenida: es moderada, pero no un paseo llano entre pueblos.',
+      'Llegar a la **ermita de Santa Margarita** y a su mirador. En un día limpio se abre el valle de Benasque, con el embalse de Eriste / Linsoles abajo y los grandes macizos cerrando el horizonte.',
+      'Regresar a Eresué por el itinerario de subida. Si quedan ganas, el embalse, Guayente y Sahún encajan después sin obligar a sumar otra ruta de montaña.',
+    ],
+    routeNote: 'Con unas 3 h de marcha deja margen para parar en el Solano, pero +540 m ya piden calzado de senderismo, agua y no salir con la mañana demasiado avanzada si hace calor.',
+    affinities: [
+      { activityId: 'linsoles-guayente-sahun', weight: 3, reason: 'El embalse, Guayente y Sahún encajan al terminar la ruta.' },
+      { activityId: 'pueblos-solano', weight: 2, reason: 'Permite completar el día con pueblos sin sumar otra subida.' },
+    ],
   },
   {
     id: 'pueblos-solano', title: 'Pueblos del Solano', area: 'solano', areaLabel: 'Solano',
@@ -636,6 +795,7 @@ const activities: Activity[] = [
     places: [{ name: 'Sahún', lat: 42.6029992, lng: 0.4470204 }],
     affinities: [
       { activityId: 'linsoles-guayente-sahun', weight: 2, reason: 'Sahún aparece en los dos planes.' },
+      { activityId: 'santa-margarita-eresue', weight: 2, reason: 'Bosque y mirador por la mañana; pueblos después.' },
       { activityId: 'laspaules-brujas', weight: 1, reason: 'Laspaúles amplía la salida por el lado del Solano.' },
     ],
   },
@@ -659,16 +819,17 @@ const activities: Activity[] = [
 const infoBlocks: InfoBlock[] = [
   {
     id: 'eating', title: 'Comer vegano por la zona',
-    intro: 'Aviso de expectativas: el valle de Benasque es territorio de cecina, ternasco y chiretas, y no hay ni un restaurante vegano en el pueblo. Lo que sí hay son un par de sitios que lo resuelven bien y una joya cerca de Aínsa. Llamar antes en todos los casos: en agosto van llenos y algunos cierran días sueltos.',
+    intro: 'Aquí «opción vegana» no significa patatas y una ensalada sin queso. Separamos los sitios donde se puede comer de verdad de los que solo resuelven una emergencia. En agosto conviene reservar o llamar antes: cartas, descansos y horarios cambian más que el mapa.',
     sections: [
       {
         heading: 'En Benasque',
         cards: [
           {
-            label: 'Lo más fiable del pueblo', title: 'Restaurante Avenida',
-            mini: ['Av. los Tilos, 14', '13:00–22:30', '**Cierra miércoles**', '974 55 11 26'],
+            label: 'La apuesta más fiable', title: 'Restaurante Avenida',
+            mini: ['Av. los Tilos, 14', 'No es vegano', 'Varias opciones completas', '974 55 11 26'],
             body: [
-              'No es vegano ni lo pretende, pero es lo que más recomiendan los comensales veganos que pasan por Benasque: hamburguesa vegetal y ensalada de mandarina y aguacate. Terraza en la calle. Pedir confirmación de que la hamburguesa va sin salsas con huevo o lácteos.',
+              'No es un restaurante vegano, pero juega en otra liga que el típico sitio de montaña que quita el queso y cobra una ensalada. Su oferta vegetal reciente incluye varios platos pensados como tales —entrantes, platos con proteína y hamburguesa—, con elaboraciones a base de seitán, berenjena, falafel, tofu, hummus o garbanzo según la carta del momento.',
+              'Es la primera llamada en Benasque si queremos cenar y elegir, no negociar un plato sobre la marcha. Confirmad al reservar qué opciones veganas mantienen ese día y el horario de agosto.',
             ],
             place: { name: 'Restaurante Avenida', lat: 42.6033333, lng: 0.5219444, googlePlaceId: 'ChIJv4xUnVt5qBIRD9L81sKguwU' },
             id: 'eating-0-0',
@@ -694,34 +855,75 @@ const infoBlocks: InfoBlock[] = [
         id: 'benasque',
       },
       {
-        heading: 'Cerca de Aínsa',
+        heading: 'Aínsa y Guaso',
         cards: [
           {
-            label: 'La joya', title: 'La Tarara de Guaso',
-            mini: ['Plaza mayor, Guaso', '100% vegano y vegetariano', '**Reserva obligatoria**', 'Menú degustación'],
+            label: 'La joya · organizar el día', title: 'La Tarara de Guaso',
+            mini: ['Plaza mayor, Guaso', 'Cocina 100% vegetal', '**Reserva imprescindible**', 'Menú degustación'],
             body: [
-              'En Guaso, un pueblo minúsculo a cinco minutos de Aínsa. Menú degustación con producto local y de temporada, la dueña explica cada plato y el tofu ahumado sale en casi todas las reseñas. Es de esos sitios por los que la gente alarga el viaje un día, y encaja con Aínsa, Añisclo o Pineta porque está justo en la ruta de vuelta.',
-              'No tiene teléfono público fijo en los directorios: hay que reservar por sus redes o preguntando en la oficina de turismo de Aínsa, y con antelación de verdad, no el mismo día.',
+              'En Guaso, a pocos minutos de Aínsa, es la única mesa de la guía por la que sí organizaríamos parte del día. La propuesta actual es completamente vegetal, en formato de menú degustación, con producto local y una cocina que cambia con la temporada.',
+              'Trabaja con pocas mesas y reserva previa. Comprobad en su canal oficial el sistema de reserva y los días de servicio antes de cuadrar Aínsa, Añisclo o Pineta alrededor de la comida; no contéis con llegar sin avisar.',
             ],
             place: { name: 'La Tarara (Guaso)', lat: 42.4159226, lng: 0.0943538, googlePlaceId: 'ChIJj76hJpT7pxIRrZq9eoX7fys' },
             id: 'eating-1-0',
           },
           {
-            label: 'En el casco de Aínsa', title: 'Mora Nuei',
-            mini: ['C. Portal de Abajo, 2', '12:00–23:00', 'Terraza con vistas', '676 41 54 04'],
+            label: 'Buena apuesta en el casco', title: 'Mora Nuei',
+            mini: ['C. Portal de Abajo, 2', 'Cocina de mercado', 'Comprobar horario', '676 41 54 04'],
             body: [
-              'Cocina de mercado con bastantes platos veganos y cocina dispuesta a adaptar y combinar. Varias reseñas cuentan que casi todos los entrantes del menú del día eran veganos y que acabaron pidiendo dos entrantes cada uno. Aviso práctico: a la hora de comer suelen exigir menú del día para toda la mesa.',
+              'Cocina de mercado con opciones vegetales trabajadas y una cocina que suele adaptar con sentido: legumbres, cereal, verdura, falafel o postre vegetal aparecen en distintas combinaciones, sin prometer que una receta concreta siga en el menú de agosto.',
+              'Menos destino gastronómico que La Tarara, pero bastante fiable para comer de verdad dentro del casco. Preguntad al reservar por la oferta vegana y por las condiciones del menú del día; no dejamos como norma fija que toda la mesa tenga que pedirlo.',
             ],
             place: { name: 'Mora Nuei', lat: 42.4157516, lng: 0.1398182, googlePlaceId: 'ChIJxb9Bmlr7pxIRhTeMmn0c0CQ' },
             id: 'eating-1-1',
+          },
+          {
+            label: 'Plan B fiable', title: 'Gastrobar Sie7e',
+            mini: ['Aínsa', 'Varias opciones concretas', 'Comprobar carta y horario'],
+            body: [
+              'Buen backup cuando La Tarara no cuadra y Mora Nuei está lleno. Su oferta reciente ha incluido hamburguesa vegetal, gyozas veganas, edamame y entrantes adaptables: suficiente para resolver una comida con varias elecciones, no para venderlo como restaurante especialmente vegano.',
+              'Confirmad la carta antes de sentaros, sobre todo salsas y frituras compartidas. No guardamos dirección, teléfono ni punto de mapa hasta poder contrastarlos con una fuente actual fiable.',
+            ],
+            id: 'eating-1-2',
           },
         ],
         id: 'ainsa',
       },
       {
-        heading: 'La regla de oro',
+        heading: 'Bielsa, Tella y Pineta',
+        cards: [
+          {
+            label: 'La buena sorpresa de Bielsa', title: 'Kanguro Truchero',
+            mini: ['Bielsa', 'Cocina internacional y fusión', 'Opciones veganas señaladas', 'Comprobar horario'],
+            body: [
+              'No es vegano, pero parece tomarse la parte vegetal en serio: cocina internacional, platos completos y opciones identificadas que van bastante más allá de hamburguesa con patatas. La carta cambia, así que es mejor preguntar qué mantienen antes de conducir hasta allí.',
+              'Encaja especialmente bien con un día de Tella, Pineta o Bielsa y Chistau. No guardamos teléfono, dirección exacta ni punto de mapa sin poder verificarlos contra información actual.',
+            ],
+            id: 'eating-2-0',
+          },
+        ],
+        id: 'bielsa',
+      },
+      {
+        heading: 'Laspaúles',
+        cards: [
+          {
+            label: 'Para salir del paso', title: 'Restaurant Laspaúles',
+            mini: ['Laspaúles', 'Confirmar opción del día', 'No asumir variedad'],
+            body: [
+              'Opción práctica para resolver la comida al visitar el pueblo, no recomendación vegana. La información local indica que suelen poder ofrecer alternativa vegetariana o vegana, pero sin una carta vegetal sólida y actual no contamos con más de una solución puntual.',
+              'Llamad antes y preguntad qué plato completo pueden preparar ese día, incluida alguna fuente de proteína. Si la respuesta se queda en patatas, ensalada o verduras, mejor llevar comida.',
+            ],
+            id: 'eating-3-0',
+          },
+        ],
+        id: 'laspaules',
+      },
+      {
+        heading: 'Zonas complicadas',
         body: [
-          'En los refugios (Estós, Cap de Llauset) y en los bares de ruta (La Besurta, Llanos del Hospital, Pineta) el plato vegano no está garantizado: avisar al reservar el refugio y, para los bares, contar con que lo seguro es patatas, pan con tomate y poco más. Los cinco días de ruta se resuelven mejor con bocadillo de casa, hummus, fruta y frutos secos que confiando en encontrar algo arriba.',
+          '**Vall de Boí:** las etiquetas institucionales de «opción vegana» no bastan para recomendar un restaurante concreto. Mejor llevar comida o llamar antes y preguntar por un plato completo, no solo por algo adaptable.',
+          '**Refugios y bares de montaña:** en Estós, Cap de Llauset, La Besurta, Llanos del Hospital o Pineta hay que avisar al reservar y llevar plan B. Bocadillo, hummus, fruta y frutos secos siguen siendo más fiables que confiar en encontrar proteína vegetal arriba.',
         ],
         id: 'refuges',
       },
