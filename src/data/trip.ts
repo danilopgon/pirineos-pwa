@@ -201,6 +201,44 @@ const activities: Activity[] = [
     affinities: [{ activityId: 'ainsa', weight: 1, reason: 'Encaja si se acepta más coche.' }],
   },
   {
+    id: 'laspaules-brujas', title: 'Laspaúles, pueblo de brujas', area: 'ribagorza',
+    areaLabel: 'Laspaúles · Ribagorza',
+    category: 'cultura', effort: 'muy-bajo', duration: 'media-jornada', combinability: 'facil',
+    tags: ['Brujería histórica', 'Pueblo + bosque', 'Día de piernas cansadas'],
+    stats: { driveMin: 32 },
+    lede: 'En Laspaúles la brujería no es solo leyenda: manuscritos del antiguo concejo documentan los procesos contra mujeres acusadas de brujería a finales del siglo XVI. El plan mezcla un pequeño centro de interpretación en el pueblo con un bosque temático levantado en el Serrat de las Forcas.',
+    routeHeading: 'El plan, con contexto',
+    route: [
+      '**Benasque → Laspaúles**: unos 30–35 min en coche.',
+      '**Centro de Interpretación de las Bruyxas de Laspaúles**, junto a la iglesia, en C/ Jacinto Pere, 7. Cuenta los procesos históricos de la zona, las supersticiones y los mecanismos de persecución y tortura de la época. La entrada indicada actualmente es de 3 €, pero hay que confirmar horario antes de ir (974 55 31 41).',
+      '**Parque Temático de las Brujas**, a unos 3 km del pueblo por la carretera hacia Alins, en el Serrat de las Forcas. Es un paseo fácil y de entrada libre por el bosque, entre escenas, esculturas y paneles, con vistas hacia el Turbón; no una ruta de montaña.',
+      'Haced primero el centro y después el parque: el bosque se entiende bastante mejor cuando las escenas ya tienen contexto histórico.',
+    ],
+    sections: [
+      {
+        heading: 'La historia',
+        body: [
+          'Los manuscritos del antiguo concejo documentan procesos reales por brujería y de ahí nace buena parte de la identidad cultural que hoy enseña el pueblo. Conviene separar las cosas: primero hubo persecución y violencia; las leyendas y el folclore llegaron después.',
+        ],
+        note: 'Cada dos años se celebra **Lo Consell de Laspauls**, una recreación histórica. Es una cita puntual, no algo con lo que contar para este viaje.',
+      },
+      {
+        heading: 'Antes de ir',
+        body: [
+          'Llamad al Centro de Interpretación (974 55 31 41) para comprobar el horario. Abre durante el año, pero no tiene sentido fijar aquí un calendario semanal que puede cambiar. El parque sí se visita libremente.',
+        ],
+        links: [
+          { label: 'Info y horarios', href: 'https://turismoribagorza.org/cultura/centro-de-interpretacion-de-las-bruyxas-de-laspaules/' },
+          { label: 'Turismo Laspaúles', href: 'https://www.turismolaspaules.es/centros-museisticos-laspaules/', ghost: true },
+        ],
+      },
+    ],
+    places: [
+      { name: 'Parque Temático de las Brujas de Laspaúles', lat: 42.44939, lng: 0.61815 },
+    ],
+    affinities: [{ activityId: 'pueblos-solano', weight: 1, reason: 'Son dos medias jornadas culturales en la misma dirección.' }],
+  },
+  {
     id: 'ainsa', title: 'Aínsa', area: 'ainsa', areaLabel: 'Aínsa',
     category: 'cultura', effort: 'muy-bajo', duration: 'dia-completo', combinability: 'normal',
     tags: ['Casco medieval', 'Plan de lluvia'],
@@ -596,7 +634,10 @@ const activities: Activity[] = [
       'Contad aproximadamente media jornada. Se puede ampliar sin problema, pero no tiene itinerario cerrado ni una casilla que haya que completar.',
     ],
     places: [{ name: 'Sahún', lat: 42.6029992, lng: 0.4470204 }],
-    affinities: [{ activityId: 'linsoles-guayente-sahun', weight: 2, reason: 'Sahún aparece en los dos planes.' }],
+    affinities: [
+      { activityId: 'linsoles-guayente-sahun', weight: 2, reason: 'Sahún aparece en los dos planes.' },
+      { activityId: 'laspaules-brujas', weight: 1, reason: 'Laspaúles amplía la salida por el lado del Solano.' },
+    ],
   },
   {
     id: 'cerler-ampriu', title: 'Cerler y Ampriu', area: 'cerler', areaLabel: 'Cerler',
