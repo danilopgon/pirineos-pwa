@@ -18,6 +18,30 @@ interface HeaderProps {
   onCycleTheme: () => void
 }
 
+function ThemeIcon({ mode }: { mode: ThemeMode }) {
+  if (mode === 'light') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" />
+      </svg>
+    )
+  }
+  if (mode === 'dark') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M19.5 15.2A8 8 0 0 1 8.8 4.5 8 8 0 1 0 19.5 15.2Z" />
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="13" rx="1" />
+      <path d="M8 21h8M12 17v4M12 4v13" />
+    </svg>
+  )
+}
+
 function ThemeControl({
   mode,
   announcement,
@@ -36,7 +60,7 @@ function ThemeControl({
         aria-label={labels.theme.controlName(labels.theme.modes[mode], labels.theme.modes[next])}
         onClick={onCycle}
       >
-        {labels.theme.modes[mode]}
+        <ThemeIcon mode={mode} />
       </button>
       <span className="visually-hidden" role="status" aria-live="polite">{announcement}</span>
     </>
@@ -61,7 +85,7 @@ export function Header({ title, themeMode, themeAnnouncement, onCycleTheme }: He
   return (
     <header className="top">
       <svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true">
-        <g fill="none" stroke="#6fc3ce" strokeWidth="1">
+        <g fill="none" stroke="currentColor" strokeWidth="1">
           {CONTOURS.map((d) => (
             <path key={d} d={d} />
           ))}

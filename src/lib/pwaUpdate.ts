@@ -19,7 +19,14 @@ registerSW({
 })
 
 export function checkForPwaUpdate() {
-  void registration?.update()
+  if (registration) {
+    void registration.update()
+    return
+  }
+  void navigator.serviceWorker?.getRegistration().then((currentRegistration) => {
+    registration = currentRegistration
+    return currentRegistration?.update()
+  })
 }
 
 export function consumeUpdatedFlag(): boolean {

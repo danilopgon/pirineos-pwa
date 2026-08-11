@@ -10,13 +10,13 @@
   --water-soft: #d7e6e8;
   --alert: #9e3515;
   --alert-soft: #f7e4da;
-  --crest: #6fc3ce;
+  --crest: #1a6b78;
   --nav-bg: rgba(236, 239, 240, 0.96);
   --backdrop: rgba(8, 17, 15, 0.68);
-  --header-bg: #101d1a;
-  --header-ink: #eceff0;
-  --top-dim: #cfdcd9;
-  --eyebrow-ink: #9fb5b0;
+  --header-bg: #f7f9f9;
+  --header-ink: #101d1a;
+  --top-dim: #4d5f5b;
+  --eyebrow-ink: #4d5f5b;
   --on-accent: #fff;
   --selected-soft: #dce9e6;
   --done: #246441;
@@ -45,6 +45,7 @@
   --dark-backdrop: rgba(0, 5, 4, 0.78);
   --dark-header-bg: #09100e;
   --dark-header-ink: #e6edeb;
+  --dark-crest: #6fc3ce;
   --dark-top-dim: #b7c9c5;
   --dark-eyebrow-ink: #8aa39e;
   --dark-on-accent: #0e1614;
@@ -165,11 +166,12 @@ button:disabled { cursor: not-allowed; }
   background: var(--header-bg);
   color: var(--header-ink);
 }
-.top svg {
+.top > svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  color: var(--crest);
   opacity: 0.22;
 }
 .top-in { position: relative; }
@@ -181,11 +183,23 @@ button:disabled { cursor: not-allowed; }
   gap: 16px;
 }
 .theme-toggle {
-  flex: 0 0 auto;
-  min-width: 72px;
-  min-height: 44px;
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  min-height: 48px;
+  padding: 0;
   border-color: var(--eyebrow-ink);
   color: var(--header-ink);
+}
+.theme-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .top h1 {
   max-width: 12ch;
@@ -922,6 +936,7 @@ main:focus { outline: none; }
   --backdrop: var(--dark-backdrop);
   --header-bg: var(--dark-header-bg);
   --header-ink: var(--dark-header-ink);
+  --crest: var(--dark-crest);
   --top-dim: var(--dark-top-dim);
   --eyebrow-ink: var(--dark-eyebrow-ink);
   --on-accent: var(--dark-on-accent);
@@ -957,6 +972,7 @@ main:focus { outline: none; }
     --backdrop: var(--dark-backdrop);
     --header-bg: var(--dark-header-bg);
     --header-ink: var(--dark-header-ink);
+    --crest: var(--dark-crest);
     --top-dim: var(--dark-top-dim);
     --eyebrow-ink: var(--dark-eyebrow-ink);
     --on-accent: var(--dark-on-accent);
