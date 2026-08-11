@@ -638,17 +638,18 @@ main:focus { outline: none; }
 .mini {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin: 0 0 9px;
+  gap: 8px;
+  margin: 0 0 10px;
   padding: 0;
   list-style: none;
 }
 .mini li {
-  padding: 5px 8px;
+  margin: 0;
+  padding: 7px 10px;
   border: 1px solid var(--line);
   color: var(--slate);
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.02em;
 }
 .mini li strong { color: var(--ink); font-weight: 500; }
@@ -771,11 +772,10 @@ main:focus { outline: none; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.block p,
-.block li { font-size: 15px; }
+.block :where(p, li) { font-size: 15px; }
 .block p { max-width: var(--measure); }
-.block ul { max-width: var(--measure); margin: 0 0 10px; padding-left: 20px; }
-.block li { margin-bottom: 7px; }
+.block ul:not(.mini) { max-width: var(--measure); margin: 0 0 10px; padding-left: 20px; }
+.block :where(li) { margin-bottom: 7px; }
 .block li::marker { color: var(--water); }
 .info-card {
   margin-top: 12px;
