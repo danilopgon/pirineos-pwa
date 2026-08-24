@@ -10,15 +10,6 @@ const sources = {
   gorgas: 'https://www.benasque.com/es/todo-valle-de-benasque/ruta-gorgas-alba',
 } as const
 
-function googleMapsPin(place: Place): string {
-  const params = new URLSearchParams({ api: '1', query: `${place.lat},${place.lng}` })
-  return `https://www.google.com/maps/search/?${params}`
-}
-
-function organicMapsPin(place: Place): string {
-  return `om://map?v=1&ll=${place.lat},${place.lng}&n=${encodeURIComponent(place.name)}`
-}
-
 function startSection(
   place: Place,
   body: string,
@@ -28,11 +19,8 @@ function startSection(
   return {
     heading: 'Inicio de ruta',
     body: [body],
-    links: [
-      { label: 'Inicio en Google Maps', href: googleMapsPin(place) },
-      { label: 'Inicio en Organic Maps', href: organicMapsPin(place), needsSignal: false, ghost: true },
-      ...(source ? [{ label: sourceLabel, href: source, ghost: true }] : []),
-    ],
+    places: [{ ...place, kind: 'route-start' }],
+    links: source ? [{ label: sourceLabel, href: source, ghost: true }] : undefined,
   }
 }
 
