@@ -95,7 +95,7 @@ export function ExternalLinks({ links, small }: { links?: Link[]; small?: boolea
           href={link.href}
           ghost={link.ghost}
           small={small}
-          needsSignal
+          needsSignal={link.needsSignal ?? true}
         />
       ))}
     </>
