@@ -95,7 +95,7 @@ export function ExternalLinks({ links, small }: { links?: Link[]; small?: boolea
           href={link.href}
           ghost={link.ghost}
           small={small}
-          needsSignal
+          needsSignal={link.needsSignal ?? true}
         />
       ))}
     </>
@@ -163,12 +163,12 @@ export function PlaceButton({ place }: { place: Place }) {
 
 /**
  * Ficha del sitio cuando lo tenemos identificado, y ruta en coche cuando no.
- * Los puntos con `googlePlaceId` son sitios a los que se llega andando (una
- * cascada, un pueblo); pedir ruta hasta sus coordenadas manda al coche por
- * accesos que no lo son.
+ * Los puntos con `googlePlaceId` o `kind: route-start` se abren como pin:
+ * pedir ruta en coche hasta el comienzo peatonal de un sendero puede mandar
+ * al coche por accesos que no lo son.
  */
 export function PlaceLink({ place }: { place: Place }) {
-  return place.googlePlaceId ? (
+  return place.googlePlaceId || place.kind === 'route-start' ? (
     <PlaceButton place={place} />
   ) : (
     <DriveButton place={place} ghost small />

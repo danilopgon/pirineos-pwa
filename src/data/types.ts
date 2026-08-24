@@ -35,12 +35,16 @@ export interface Place {
   lng: number
   googlePlaceId?: string
   note?: string
+  /** Los inicios de ruta se abren como pin, no como destino en coche. */
+  kind?: 'route-start'
 }
 
 export interface Link {
   label: string
   href: string
   ghost?: boolean
+  /** Los deep links offline (por ejemplo om://) no necesitan cobertura. */
+  needsSignal?: boolean
 }
 
 export interface ElevationProfile {

@@ -12,6 +12,9 @@ import '@fontsource/ibm-plex-mono/latin-400.css'
 import '@fontsource/ibm-plex-mono/latin-500.css'
 import './styles.css'
 
+// Extensión editorial acotada a las rutas locales de Benasque. Se evalúa antes
+// de App para mantener intacto el catálogo base y los ids persistidos.
+import './data/benasqueRoutes'
 import { App } from './App'
 
 const root = document.getElementById('root')
