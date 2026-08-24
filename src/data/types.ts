@@ -41,6 +41,8 @@ export interface Link {
   label: string
   href: string
   ghost?: boolean
+  /** Los deep links offline (por ejemplo om://) no necesitan cobertura. */
+  needsSignal?: boolean
 }
 
 export interface ElevationProfile {
