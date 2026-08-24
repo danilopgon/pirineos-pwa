@@ -35,6 +35,8 @@ export interface Place {
   lng: number
   googlePlaceId?: string
   note?: string
+  /** Los inicios de ruta se abren como pin, no como destino en coche. */
+  kind?: 'route-start'
 }
 
 export interface Link {
