@@ -7,6 +7,7 @@ interface ActivityCardProps {
   currentDayIndex: number
   headingLevel?: 'h3' | 'h4'
   isAdded: boolean
+  plannedDayIndexes?: readonly number[]
   onAdd: (activityId: ActivityId) => void
   onRemove: (activityId: ActivityId) => void
   onOpen: (activity: Activity) => void
@@ -17,19 +18,21 @@ export function ActivityCard({
   currentDayIndex,
   headingLevel = 'h3',
   isAdded,
+  plannedDayIndexes = [],
   onAdd,
   onRemove,
   onOpen,
 }: ActivityCardProps) {
   const titleId = `activity-${activity.id}-title`
   const Heading = headingLevel
+  const isPlanned = plannedDayIndexes.length > 0
 
   return (
     <article
       className="activity-card"
       data-category={activity.category}
       data-effort={activity.effort}
-      data-added={isAdded || undefined}
+      data-added={isPlanned || undefined}
       aria-labelledby={titleId}
     >
       <header className="activity-card__header">
@@ -60,9 +63,11 @@ export function ActivityCard({
 
       {activity.stats && <StatsGrid stats={activity.stats} />}
 
-      {isAdded && (
-        <p className="activity-card__added">{labels.catalogue.added(currentDayIndex)}</p>
-      )}
+      {plannedDayIndexes.map((dayIndex) => (
+        <p className="activity-card__added" key={dayIndex}>
+          {labels.catalogue.added(dayIndex)}
+        </p>
+      ))}
 
       <div className="activity-card__actions btns">
         <button
