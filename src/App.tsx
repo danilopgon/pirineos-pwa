@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { labels, trip } from './data/trip'
 import { ExploreView } from './components/ExploreView'
 import { Header } from './components/Header'
@@ -49,6 +49,17 @@ export function App() {
   const { mode: themeMode, cycleTheme } = useTheme()
   const { canInstall, installed, install } = useInstallPrompt()
   const currentDay = state.days[state.currentDayId]
+  const plannedDayIndexesByActivity = useMemo(() => {
+    const planned: Record<string, number[]> = {}
+
+    for (const day of trip.days) {
+      for (const activityId of state.days[day.id].activityIds) {
+        ;(planned[activityId] ??= []).push(day.index)
+      }
+    }
+
+    return planned
+  }, [state.days])
 
   useEffect(() => {
     if (!showUpdateNotice) return
@@ -114,6 +125,7 @@ export function App() {
             days={trip.days}
             currentDayId={state.currentDayId}
             addedActivityIds={currentDay.activityIds}
+            plannedDayIndexesByActivity={plannedDayIndexesByActivity}
             selectedVariantIds={currentDay.selectedVariantIds}
             onSelectDay={selectCurrentDay}
             onAdd={(activityId) => addActivity(state.currentDayId, activityId)}
