@@ -26,6 +26,7 @@ interface ExploreViewProps {
   days: readonly TripDay[]
   currentDayId: TripDayId
   addedActivityIds: readonly ActivityId[]
+  plannedDayIndexesByActivity?: Readonly<Record<ActivityId, readonly number[] | undefined>>
   selectedVariantIds?: Readonly<Record<ActivityId, string | undefined>>
   onSelectDay: (dayId: TripDayId) => void
   onAdd: (activityId: ActivityId) => void
@@ -38,6 +39,7 @@ export function ExploreView({
   days,
   currentDayId,
   addedActivityIds,
+  plannedDayIndexesByActivity = {},
   selectedVariantIds = {},
   onSelectDay,
   onAdd,
@@ -125,6 +127,7 @@ export function ExploreView({
                 activity={activity}
                 currentDayIndex={currentDayIndex}
                 isAdded={added.has(activity.id)}
+                plannedDayIndexes={plannedDayIndexesByActivity[activity.id] ?? []}
                 onAdd={addActivity}
                 onRemove={removeActivity}
                 onOpen={setOpenActivity}
@@ -144,6 +147,7 @@ export function ExploreView({
           activity={openActivity}
           currentDayIndex={currentDayIndex}
           isAdded={added.has(openActivity.id)}
+          plannedDayIndexes={plannedDayIndexesByActivity[openActivity.id] ?? []}
           selectedVariantId={selectedVariantIds[openActivity.id]}
           onAdd={addActivity}
           onRemove={removeActivity}
