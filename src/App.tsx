@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { activities } from './data/catalogue'
 import { labels, trip } from './data/trip'
 import { ExploreView } from './components/ExploreView'
 import { Header } from './components/Header'
@@ -109,7 +110,7 @@ export function App() {
 
         {view === 'today' ? (
           <TodayView
-            activities={trip.activities}
+            activities={activities}
             days={trip.days}
             state={state}
             onSelectDay={selectCurrentDay}
@@ -121,7 +122,7 @@ export function App() {
           />
         ) : view === 'explore' ? (
           <ExploreView
-            activities={trip.activities}
+            activities={activities}
             days={trip.days}
             currentDayId={state.currentDayId}
             addedActivityIds={currentDay.activityIds}
