@@ -19,6 +19,7 @@ interface ActivityDetailProps {
   activity: Activity
   currentDayIndex: number
   isAdded: boolean
+  plannedDayIndexes?: readonly number[]
   selectedVariantId?: string
   onAdd: (activityId: ActivityId) => void
   onRemove: (activityId: ActivityId) => void
@@ -54,6 +55,7 @@ export function ActivityDetail({
   activity,
   currentDayIndex,
   isAdded,
+  plannedDayIndexes = [],
   selectedVariantId,
   onAdd,
   onRemove,
@@ -164,7 +166,9 @@ export function ActivityDetail({
               {labels.catalogue.add(currentDayIndex)}
             </button>
           )}
-          {isAdded && <p role="status">{labels.catalogue.added(currentDayIndex)}</p>}
+          {plannedDayIndexes.map((dayIndex) => (
+            <p role="status" key={dayIndex}>{labels.catalogue.added(dayIndex)}</p>
+          ))}
         </div>
 
         {activity.stats && (
