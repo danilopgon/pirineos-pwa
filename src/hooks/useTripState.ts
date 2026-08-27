@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { trip } from '../data/trip'
+import { activities } from '../data/catalogue'
 import type {
   Activity,
   ActivityId,
@@ -32,7 +32,7 @@ function isDayId(value: unknown): value is TripDayId {
   return typeof value === 'string' && DAY_IDS.includes(value as TripDayId)
 }
 
-const activitiesById = new Map(trip.activities.map((activity) => [activity.id, activity]))
+const activitiesById = new Map(activities.map((activity) => [activity.id, activity]))
 
 function stringItems(value: unknown): string[] {
   return Array.isArray(value)
@@ -247,7 +247,7 @@ export function useTripState() {
       dayId,
       activityId,
       variantId,
-      trip.activities,
+      activities,
     ))
   }, [])
 
